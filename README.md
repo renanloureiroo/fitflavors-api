@@ -10,11 +10,41 @@ authorName: 'Serverless, Inc.'
 authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
 -->
 
-# Serverless Framework Node HTTP API on AWS
+# FitFlavors API
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+API para o sistema FitFlavors construída com Node.js, TypeScript e Serverless Framework.
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+## 🛠️ Tecnologias
+
+- **Node.js** - Runtime JavaScript
+- **TypeScript** - Linguagem de programação
+- **Serverless Framework** - Framework para deploy em AWS Lambda
+- **ESLint** - Linter para análise de código
+- **Prettier** - Formatador de código
+- **Zod** - Validação de schemas
+
+## 📋 Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+npm run dev              # Inicia o servidor local com hot reload
+
+# Qualidade de código
+npm run lint             # Executa o ESLint
+npm run lint:fix         # Executa o ESLint e corrige problemas automaticamente
+npm run format           # Formata o código com Prettier
+npm run format:check     # Verifica se o código está formatado
+npm run type-check       # Verifica tipos TypeScript
+npm run check            # Executa todas as verificações (type-check + lint + format:check)
+```
+
+## 🚀 Deploy
+
+Para fazer deploy da aplicação:
+
+```bash
+serverless deploy
+```
 
 ## Usage
 

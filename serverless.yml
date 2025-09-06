@@ -5,6 +5,9 @@ app: fitflavors
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: fitflavors-api
 
+plugins:
+  - serverless-offline
+
 provider:
   name: aws
   region: us-east-1
@@ -24,14 +27,14 @@ build:
 
 functions:
   signin:
-    handler: src/sign.handler
+    handler: src/infra/functions/signin.handler
     events:
       - httpApi:
           path: /signin
-          method: get
+          method: post
 
   signup:
-    handler: src/signup.handler
+    handler: src/infra/functions/signup.handler
     events:
       - httpApi:
           path: /signup
