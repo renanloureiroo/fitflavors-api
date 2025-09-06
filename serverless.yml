@@ -1,0 +1,38 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: fitflavors
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: fitflavors
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: fitflavors-api
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs22.x
+  architecture: arm64
+  # Uncomment to easily set up a custom domain. Read the docs for more details:
+  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
+  # domain: api.example.com
+
+package:
+  individually: true
+
+build:
+  esbuild:
+    minify: true
+    sourcemap: false
+
+functions:
+  signin:
+    handler: src/sign.handler
+    events:
+      - httpApi:
+          path: /signin
+          method: get
+
+  signup:
+    handler: src/signup.handler
+    events:
+      - httpApi:
+          path: /signup
+          method: post
