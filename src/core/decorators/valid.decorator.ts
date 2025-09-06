@@ -1,6 +1,6 @@
 import { ZodType, ZodError } from 'zod';
-import { ValidationFormatter } from '../utils/validation-formatter';
-import { HttpRequest, HttpResponse } from '../types/http';
+import { ValidationFormatter } from '@/core/utils/validation-formatter';
+import { HttpRequest, HttpResponse } from '@/core/http/types/http';
 
 // Tipos para as opções de validação
 type ValidationTarget = 'body' | 'params' | 'queryParams';

@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { HttpHandler } from '../../../core/http/http-handler';
-import { HttpRequest, HttpResponse, Valid } from '../../../core/http';
+import { HttpHandler } from '@/core/http/http-handler';
+import { Valid } from '@/core/decorators/valid.decorator';
+import { HttpRequest, HttpResponse } from '@/core/http/types/http';
 
 const schema = z.object({
   goal: z.enum(['lose', 'maintain', 'gain']),

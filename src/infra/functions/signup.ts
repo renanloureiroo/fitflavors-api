@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-import { SignUpController } from '../../domain/users/controllers/sign-up.controller';
-import { LambdaEventMapper } from '../mappers/lambda-event.mapper';
+import { SignUpController } from '@/domain/users/controllers/sign-up.controller';
+import { LambdaEventMapper } from '@/infra/mappers/lambda-event.mapper';
 
 export async function handler(
   event: APIGatewayProxyEventV2

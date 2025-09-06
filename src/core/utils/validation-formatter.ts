@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { ValidationError, ErrorResponse } from '../types/validation';
+import { ErrorResponse, ValidationError } from '@/core/validation';
 
 export class ValidationFormatter {
   static formatZodError(

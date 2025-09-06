@@ -1,5 +1,5 @@
-import { HttpResponse } from './types/http';
-import { ErrorResponse, ValidationError } from './types/validation';
+import { HttpResponse } from '@/core/http/types/http';
+import { ErrorResponse, ValidationError } from '@/core/validation';
 
 export class HttpHandler {
   static ok(body: Record<string, unknown> = {}): HttpResponse {
