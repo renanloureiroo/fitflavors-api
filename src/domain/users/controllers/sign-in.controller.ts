@@ -3,8 +3,10 @@ import { HttpHandler } from '@/core/http/http-handler';
 import { HttpRequest, HttpResponse } from '@/core/http/types/http';
 import { SignInUsecase } from '../usecases/sign-in.usecase';
 import { DrizzleUserRepository } from '@/infra/db/drizzle/repositories/drizzle-user.repository';
-import { JwtProviderImpl, PasswordProviderImpl } from '@/infra/providers';
+import { JwtProviderImpl } from '@/infra/providers/jwt.provider';
+import { PasswordProviderImpl } from '@/infra/providers/password.provider';
 import { HandlerAppError } from '@/core/utils/handler-app-error';
+import { LoginResponseDTO } from '../dtos/login-response.dto';
 
 const _schema = z.object({
   email: z.email(),
@@ -34,7 +36,12 @@ export class SignInController {
 
       const result = await signInUsecase.execute({ email, password });
 
-      return HttpHandler.ok(result);
+      const response: LoginResponseDTO = {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      };
+
+      return HttpHandler.ok(response);
     } catch (error) {
       return HandlerAppError.handle(error);
     }

@@ -8,6 +8,11 @@ export type HttpRequest<
   body: T;
   params: P;
   queryParams: Q;
+  headers?: Record<string, string>;
+  context: {
+    userId: string;
+    email: string;
+  };
 };
 
 export type HttpResponse<T extends DefaultType = DefaultType> = {

@@ -1,8 +1,9 @@
 import { User } from '../entities/user';
 import { UserRepository } from '../repositories/user.repository';
-import { JwtProvider } from '@/infra/providers/jwt.provider';
+
 import { PasswordProvider } from '@/infra/providers/password.provider';
 import { InvalidCredentialsError } from '../errors/invalid-credentials.error';
+import { JwtProvider } from '../providers/jwt.provider';
 
 type SignInUsecaseRequest = {
   email: string;
@@ -11,6 +12,7 @@ type SignInUsecaseRequest = {
 
 type SignInUsecaseResult = {
   accessToken: string;
+  refreshToken: string;
 };
 
 export class SignInUsecase {
@@ -36,10 +38,11 @@ export class SignInUsecase {
       throw new InvalidCredentialsError();
     }
 
-    const accessToken = this.generateAccessToken(user);
+    const { accessToken, refreshToken } = this.generateTokens(user);
 
     return {
       accessToken,
+      refreshToken,
     };
   }
 
@@ -47,10 +50,23 @@ export class SignInUsecase {
     return this.userRepository.findByEmail(email);
   }
 
-  private generateAccessToken(user: User): string {
-    return this.jwtProvider.generateToken({
+  private generateTokens(user: User): {
+    accessToken: string;
+    refreshToken: string;
+  } {
+    const accessToken = this.jwtProvider.generateToken({
       sub: user.id.toString(),
       email: user.email,
     });
+
+    const refreshToken = this.jwtProvider.generateToken(
+      {
+        sub: user.id.toString(),
+        email: user.email,
+      },
+      { expiresIn: '15d' }
+    );
+
+    return { accessToken, refreshToken };
   }
 }

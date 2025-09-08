@@ -18,6 +18,27 @@ export class LambdaEventMapper {
       body: JSON.parse(raw.body ?? '{}') as T,
       params: raw.pathParameters ?? {},
       queryParams: raw.queryStringParameters ?? {},
+      headers: raw.headers
+        ? Object.fromEntries(
+            Object.entries(raw.headers).map(([key, value]) => [
+              key,
+              value ?? '',
+            ])
+          )
+        : {},
+      context: {
+        // Informações do usuário autenticado vindas do JWT Authorizer
+        // Para JWT authorizers, o contexto vem em requestContext.authorizer.jwt.claims
+        userId:
+          (raw.requestContext as any)?.authorizer?.jwt?.claims?.sub ||
+          (raw.requestContext as any)?.authorizer?.sub ||
+          (raw.requestContext as any)?.authorizer?.userId ||
+          (raw.requestContext as any)?.authorizer?.['user-id'],
+        email:
+          (raw.requestContext as any)?.authorizer?.jwt?.claims?.email ||
+          (raw.requestContext as any)?.authorizer?.email ||
+          (raw.requestContext as any)?.authorizer?.['user-email'],
+      },
     };
   }
 

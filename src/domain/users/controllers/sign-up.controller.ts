@@ -4,8 +4,11 @@ import { Valid } from '@/core/decorators/valid.decorator';
 import { HttpRequest, HttpResponse } from '@/core/http/types/http';
 import { DrizzleUserRepository } from '@/infra/db/drizzle/repositories/drizzle-user.repository';
 import { CreateAccountUsecase } from '../usecases/create-account.usecase';
-import { JwtProviderImpl, PasswordProviderImpl } from '@/infra/providers';
+import { JwtProviderImpl } from '@/infra/providers/jwt.provider';
+import { PasswordProviderImpl } from '@/infra/providers/password.provider';
 import { HandlerAppError } from '@/core/utils/handler-app-error';
+import { CalculateGoalService } from '../services/calculate-goal';
+import { CreateAccountResponseDTO } from '../dtos/create-account-response.dto';
 
 const schema = z.object({
   goal: z.enum(['lose', 'maintain', 'gain']),
@@ -35,11 +38,12 @@ export class SignUpController {
       const repository = new DrizzleUserRepository();
       const jwtProvider = new JwtProviderImpl();
       const passwordProvider = new PasswordProviderImpl();
-
+      const calculateGoalService = new CalculateGoalService();
       const usecase = new CreateAccountUsecase(
         repository,
         jwtProvider,
-        passwordProvider
+        passwordProvider,
+        calculateGoalService
       );
 
       const result = await usecase.execute({
@@ -53,7 +57,13 @@ export class SignUpController {
         weight: request.body.weight,
         activityLevel: request.body.activityLevel,
       });
-      return HttpHandler.created(result);
+
+      const response: CreateAccountResponseDTO = {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      };
+
+      return HttpHandler.created(response);
     } catch (error) {
       return HandlerAppError.handle(error);
     }

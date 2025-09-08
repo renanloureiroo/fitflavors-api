@@ -1,6 +1,8 @@
 import {
   date,
   integer,
+  json,
+  pgEnum,
   pgTable,
   timestamp,
   uuid,
@@ -25,6 +27,31 @@ export const users = pgTable('users', {
   carbohydrates: integer().notNull(),
   fats: integer().notNull(),
 
-  createdAt: timestamp('createdAt').notNull(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull(),
+});
+
+export const mealsStatus = pgEnum('meals_status', [
+  'uploading',
+  'queued',
+  'processing',
+  'success',
+  'failed',
+]);
+
+export const mealInputTypes = pgEnum('input_types', ['audio', 'picture']);
+
+export const meals = pgTable('meals', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  status: mealsStatus().notNull(),
+  inputType: mealInputTypes('input_type').notNull(),
+  inputFileKey: varchar('input_file_key', { length: 255 }).notNull(),
+  name: varchar({ length: 255 }).notNull(),
+  icon: varchar({ length: 255 }).notNull(),
+  foods: json(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull(),
 });
