@@ -40,6 +40,8 @@
 - **[Sign Up](./endpoints/signup-c4.md)** - Criação de conta de usuário
 - **[Sign In](./endpoints/signin-c4.md)** - Autenticação de usuário
 - **[Profile](./endpoints/profile-c4.md)** - Perfil do usuário (protegido)
+- **[Create Meal](./endpoints/create-meal-c4.md)** - Criação de refeição (protegido)
+- **[List Meals](./endpoints/list-meals-c4.md)** - Listagem de refeições (protegido)
 
 ### **📝 Templates & Padrões**
 

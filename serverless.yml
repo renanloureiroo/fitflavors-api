@@ -63,3 +63,23 @@ functions:
           authorizer:
             name: authorizer
             identitySource: $request.header.Authorization
+
+  meal:
+    handler: src/infra/functions/meal.handler
+    events:
+      - httpApi:
+          path: /meals
+          method: post
+          authorizer:
+            name: authorizer
+            identitySource: $request.header.Authorization
+
+  listMeals:
+    handler: src/infra/functions/list-meals.handler
+    events:
+      - httpApi:
+          path: /meals
+          method: get
+          authorizer:
+            name: authorizer
+            identitySource: $request.header.Authorization

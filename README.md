@@ -82,6 +82,8 @@ npm run type-check   # Verificação de tipos
 - **[Sign Up](docs/endpoints/signup-c4.md)** - Criação de conta de usuário
 - **[Sign In](docs/endpoints/signin-c4.md)** - Autenticação de usuário
 - **[Profile](docs/endpoints/profile-c4.md)** - Perfil do usuário (protegido)
+- **[Create Meal](docs/endpoints/create-meal-c4.md)** - Criação de refeição (protegido)
+- **[List Meals](docs/endpoints/list-meals-c4.md)** - Listagem de refeições (protegido)
 
 ### 📝 **Templates & Padrões**
 
@@ -94,6 +96,8 @@ npm run type-check   # Verificação de tipos
 | `POST` | `/signup` | Criação de conta de usuário | ❌   |
 | `POST` | `/signin` | Autenticação de usuário     | ❌   |
 | `GET`  | `/me`     | Perfil do usuário           | ✅   |
+| `POST` | `/meals`  | Criação de refeição         | ✅   |
+| `GET`  | `/meals`  | Listagem de refeições       | ✅   |
 
 ## 🧪 Testes
 

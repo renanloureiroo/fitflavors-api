@@ -13,11 +13,13 @@ export class LambdaEventMapper {
    */
   static toHttpRequest<
     T extends Record<string, unknown> = Record<string, unknown>,
-  >(raw: APIGatewayProxyEventV2): HttpRequest<T> {
+    P extends Record<string, unknown> = Record<string, unknown>,
+    Q extends Record<string, unknown> = Record<string, unknown>,
+  >(raw: APIGatewayProxyEventV2): HttpRequest<T, P, Q> {
     return {
       body: JSON.parse(raw.body ?? '{}') as T,
-      params: raw.pathParameters ?? {},
-      queryParams: raw.queryStringParameters ?? {},
+      params: (raw.pathParameters ?? {}) as P,
+      queryParams: (raw.queryStringParameters ?? {}) as Q,
       headers: raw.headers
         ? Object.fromEntries(
             Object.entries(raw.headers).map(([key, value]) => [

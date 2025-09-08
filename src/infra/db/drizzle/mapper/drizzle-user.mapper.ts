@@ -4,7 +4,7 @@ import { UniqueEntityId } from '@/core/unique-entity-id';
 
 type DrizzleUser = typeof users.$inferSelect;
 
-export class DrizzleMapper {
+export class DrizzleUserMapper {
   static toDomain(raw: DrizzleUser): User {
     return User.create(
       {

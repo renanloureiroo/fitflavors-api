@@ -119,11 +119,42 @@ src/
 
 ### **Fluxo de Dados**
 
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant AG as API Gateway
+    participant AUTH as Authorizer
+    participant LH as Lambda Handler
+    participant CTRL as Controller
+    participant UC as Usecase
+    participant REPO as Repository
+    participant DB as Database
+
+    C->>AG: [MÉTODO] /[ENDPOINT] + [AUTH_HEADER]
+    AG->>AUTH: Validate JWT Token
+    AUTH->>AG: Policy + User Context
+    AG->>LH: Invoke Lambda
+    LH->>CTRL: Map to HttpRequest
+    CTRL->>UC: Execute usecase
+    UC->>REPO: [OPERATION] data
+    REPO->>DB: [SQL_OPERATION]
+    DB-->>REPO: [RESULT]
+    REPO-->>UC: Return [ENTITY]
+    UC-->>CTRL: Return [RESULT]
+    CTRL-->>LH: Return HTTP response
+    LH-->>AG: Lambda response
+    AG-->>C: [STATUS_CODE] + [DATA]
 ```
-Cliente → API Gateway → Lambda Handler → Controller → Usecase → Repository → Database
-                ↑                                                                    ↓
-                ← Response ← Response ← Response ← Response ← Response ← Response ←
-```
+
+**Personalização do Diagrama:**
+
+- Substitua `[MÉTODO]` pelo método HTTP (GET, POST, PUT, DELETE)
+- Substitua `/[ENDPOINT]` pelo caminho do endpoint
+- Substitua `[AUTH_HEADER]` por "JWT" se autenticado, ou remova se público
+- Substitua `[OPERATION]` pela operação específica (Create, Read, Update, Delete)
+- Substitua `[SQL_OPERATION]` pela operação SQL (INSERT, SELECT, UPDATE, DELETE)
+- Substitua `[STATUS_CODE]` pelo código de status HTTP (200, 201, 400, etc.)
+- Substitua `[DATA]` pela descrição dos dados retornados
 
 ### **Validações**
 

@@ -7,16 +7,18 @@ import { JwtProviderImpl } from '@/infra/providers/jwt.provider';
 import { PasswordProviderImpl } from '@/infra/providers/password.provider';
 import { HandlerAppError } from '@/core/utils/handler-app-error';
 import { LoginResponseDTO } from '../dtos/login-response.dto';
+import { Valid } from '@/core/decorators/valid.decorator';
 
-const _schema = z.object({
+const schema = z.object({
   email: z.email(),
   password: z.string().min(8),
 });
 
-export type SignInRequest = z.infer<typeof _schema>;
+export type SignInRequest = z.infer<typeof schema>;
 
 export class SignInController {
   static async handle(
+    @Valid(schema)
     request: HttpRequest<SignInRequest>
   ): Promise<HttpResponse> {
     try {

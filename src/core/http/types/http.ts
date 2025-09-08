@@ -1,4 +1,4 @@
-type DefaultType = Record<string, unknown>;
+export type DefaultType = Record<string, unknown>;
 
 export type HttpRequest<
   T extends DefaultType = DefaultType,

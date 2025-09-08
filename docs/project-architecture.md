@@ -23,11 +23,13 @@ API serverless para controle nutricional e fitness, construída com **AWS Lambda
 
 ### 📊 **Endpoints da API**
 
-| Método | Endpoint  | Descrição         | Auth |
-| ------ | --------- | ----------------- | ---- |
-| `POST` | `/signup` | Criação de conta  | ❌   |
-| `POST` | `/signin` | Autenticação      | ❌   |
-| `GET`  | `/me`     | Perfil do usuário | ✅   |
+| Método | Endpoint  | Descrição             | Auth |
+| ------ | --------- | --------------------- | ---- |
+| `POST` | `/signup` | Criação de conta      | ❌   |
+| `POST` | `/signin` | Autenticação          | ❌   |
+| `GET`  | `/me`     | Perfil do usuário     | ✅   |
+| `POST` | `/meals`  | Criação de refeição   | ✅   |
+| `GET`  | `/meals`  | Listagem de refeições | ✅   |
 
 ## 📊 **Estrutura de Dados**
 
