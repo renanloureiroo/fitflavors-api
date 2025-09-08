@@ -15,7 +15,7 @@ class Entity<Props> {
     return this._props;
   }
 
-  public equals(entity: Entity<any>): boolean {
+  public equals(entity: Entity<unknown>): boolean {
     if (entity === this) return true;
 
     if (entity._id === this._id) return true;

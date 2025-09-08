@@ -2,13 +2,19 @@ import { CreateAccountDTO } from '../dtos/create-account.dto';
 import { Gender, Goal, User } from '../entities/user';
 import { UserAlreadyExistsError } from '../errors/user-already-exists.error';
 import { UserRepository } from '../repositories/user.repository';
+import { JwtProvider } from '@/infra/providers/jwt.provider';
+import { PasswordProvider } from '@/infra/providers/password.provider';
 
-interface CreateAccountUsecaseResult {
+type CreateAccountUsecaseResult = {
   accessToken: string;
-}
+};
 
 export class CreateAccountUsecase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtProvider: JwtProvider,
+    private readonly passwordProvider: PasswordProvider
+  ) {}
 
   async execute(data: CreateAccountDTO): Promise<CreateAccountUsecaseResult> {
     const userAlreadyExists = await this.hasAccountWithEmail(data.email);
@@ -17,8 +23,10 @@ export class CreateAccountUsecase {
       throw new UserAlreadyExistsError();
     }
 
-    const user = this.createUser(data);
+    const user = await this.createUser(data);
+
     const accessToken = this.generateAccessToken(user);
+    console.log(accessToken);
 
     return {
       accessToken,
@@ -29,11 +37,15 @@ export class CreateAccountUsecase {
     return this.userRepository.findByEmail(email);
   }
 
-  private createUser(data: CreateAccountDTO): User {
-    return User.create({
+  private async createUser(data: CreateAccountDTO): Promise<User> {
+    const hashedPassword = await this.passwordProvider.hashPassword(
+      data.password
+    );
+
+    const user = User.create({
       name: data.name,
       email: data.email,
-      password: data.password,
+      password: hashedPassword,
       gender: data.gender as Gender,
       goal: data.goal as Goal,
       birthDate: new Date(data.birthDate),
@@ -41,9 +53,15 @@ export class CreateAccountUsecase {
       weight: data.weight,
       activityLevel: data.activityLevel,
     });
+    await this.userRepository.save(user);
+
+    return user;
   }
 
-  private generateAccessToken(_user: User): string {
-    return '1234567890';
+  private generateAccessToken(user: User): string {
+    return this.jwtProvider.generateToken({
+      sub: user.id.toString(),
+      email: user.email,
+    });
   }
 }

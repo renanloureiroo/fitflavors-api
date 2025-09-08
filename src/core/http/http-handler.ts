@@ -1,22 +1,37 @@
 import { HttpResponse } from '@/core/http/types/http';
 import { ErrorResponse, ValidationError } from '@/core/validation';
 
+type DefaultType = Record<string, unknown>;
+
 export class HttpHandler {
-  static ok(body: Record<string, unknown> = {}): HttpResponse {
+  static response<T extends DefaultType = DefaultType>(
+    statusCode: number,
+    body: T = {} as T
+  ): HttpResponse<T> {
+    return { statusCode, body };
+  }
+
+  static ok<T extends DefaultType = DefaultType>(
+    body: T = {} as T
+  ): HttpResponse<T> {
     return {
       statusCode: 200,
       body,
     };
   }
 
-  static created(body: Record<string, unknown> = {}): HttpResponse {
+  static created<T extends DefaultType = DefaultType>(
+    body: T = {} as T
+  ): HttpResponse<T> {
     return {
       statusCode: 201,
       body,
     };
   }
 
-  static badRequest(body: Record<string, unknown> = {}): HttpResponse {
+  static badRequest<T extends DefaultType = DefaultType>(
+    body: T = {} as T
+  ): HttpResponse<T> {
     return {
       statusCode: 400,
       body,

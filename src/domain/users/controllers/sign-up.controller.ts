@@ -2,6 +2,10 @@ import { z } from 'zod';
 import { HttpHandler } from '@/core/http/http-handler';
 import { Valid } from '@/core/decorators/valid.decorator';
 import { HttpRequest, HttpResponse } from '@/core/http/types/http';
+import { DrizzleUserRepository } from '@/infra/db/drizzle/repositories/drizzle-user.repository';
+import { CreateAccountUsecase } from '../usecases/create-account.usecase';
+import { JwtProviderImpl, PasswordProviderImpl } from '@/infra/providers';
+import { HandlerAppError } from '@/core/utils/handler-app-error';
 
 const schema = z.object({
   goal: z.enum(['lose', 'maintain', 'gain']),
@@ -27,13 +31,31 @@ export class SignUpController {
     @Valid(schema)
     request: HttpRequest<SignUpRequest>
   ): Promise<HttpResponse> {
-    return HttpHandler.created({
-      accessToken: '1234567890',
-      user: {
-        id: 'user-123',
+    try {
+      const repository = new DrizzleUserRepository();
+      const jwtProvider = new JwtProviderImpl();
+      const passwordProvider = new PasswordProviderImpl();
+
+      const usecase = new CreateAccountUsecase(
+        repository,
+        jwtProvider,
+        passwordProvider
+      );
+
+      const result = await usecase.execute({
         name: request.body.account.name,
         email: request.body.account.email,
-      },
-    });
+        password: request.body.account.password,
+        gender: request.body.gender,
+        goal: request.body.goal,
+        birthDate: request.body.birthDate,
+        height: request.body.height,
+        weight: request.body.weight,
+        activityLevel: request.body.activityLevel,
+      });
+      return HttpHandler.created(result);
+    } catch (error) {
+      return HandlerAppError.handle(error);
+    }
   }
 }

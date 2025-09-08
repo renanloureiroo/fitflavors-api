@@ -1,7 +1,7 @@
 export class AppError<T extends Array<unknown> = Array<unknown>> extends Error {
-  protected status: number;
-  protected errors: T = [] as unknown as T;
-  protected timestamp: string;
+  public status: number;
+  public errors: T = [] as unknown as T;
+  public timestamp: string;
 
   constructor(message: string, statusCode: number, errors?: T) {
     super(message);
