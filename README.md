@@ -1,99 +1,109 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# 🍎 FitFlavors API
 
-# FitFlavors API
+> API serverless para aplicação de controle nutricional e fitness
 
-API para o sistema FitFlavors construída com Node.js, TypeScript e Serverless Framework.
+[![Node.js](https://img.shields.io/badge/Node.js-22.x-green)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+[![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)](https://aws.amazon.com/lambda/)
+[![Serverless](https://img.shields.io/badge/Serverless-Framework-red)](https://www.serverless.com/)
 
-## 🛠️ Tecnologias
+## 🎯 Sobre o Projeto
 
-- **Node.js** - Runtime JavaScript
-- **TypeScript** - Linguagem de programação
-- **Serverless Framework** - Framework para deploy em AWS Lambda
-- **ESLint** - Linter para análise de código
-- **Prettier** - Formatador de código
-- **Zod** - Validação de schemas
+API serverless desenvolvida para aplicações de controle nutricional e fitness. Permite que usuários criem contas, façam login e acessem perfis com metas nutricionais calculadas.
 
-## 📋 Scripts Disponíveis
+### ✨ Funcionalidades
+
+- 🔐 **Autenticação JWT** com validação no API Gateway
+- 👤 **Gestão de usuários** com perfis completos
+- 🎯 **Cálculo de metas nutricionais** baseado em objetivos pessoais
+- 🔒 **Segurança robusta** com criptografia de senhas
+
+## 🚀 Quick Start
+
+### Instalação
 
 ```bash
-# Desenvolvimento
-npm run dev              # Inicia o servidor local com hot reload
+# Clone o repositório
+git clone https://github.com/seu-usuario/fitflavors-api.git
+cd fitflavors-api
 
-# Qualidade de código
-npm run lint             # Executa o ESLint
-npm run lint:fix         # Executa o ESLint e corrige problemas automaticamente
-npm run format           # Formata o código com Prettier
-npm run format:check     # Verifica se o código está formatado
-npm run type-check       # Verifica tipos TypeScript
-npm run check            # Executa todas as verificações (type-check + lint + format:check)
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+
+# Execute localmente
+npm run dev
+```
+
+### Variáveis de Ambiente
+
+```bash
+DATABASE_URL=postgresql://user:password@host:port/database
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
+ENCRYPT_SALTS=10
+```
+
+### Scripts
+
+```bash
+npm run dev          # Desenvolvimento local
+npm run lint         # Linting do código
+npm run format       # Formatação do código
+npm run type-check   # Verificação de tipos
+```
+
+## 📚 Documentação
+
+### 🏗️ Arquitetura
+
+- **[Arquitetura do Projeto](docs/project-architecture.md)** - Visão geral e diagramas
+- **[Arquitetura de Pastas](docs/folder-architecture.md)** - Organização do código
+- **[ADR-001: Serverless](docs/adrs/adr-001-serverless-architecture.md)** - Decisão arquitetural
+- **[ADR-002: Autenticação](docs/adrs/adr-002-authentication-validation.md)** - Validação de JWT
+
+### 🔌 Endpoints (C4 Model)
+
+- **[Sign Up](docs/endpoints/signup-c4.md)** - Criação de conta
+- **[Sign In](docs/endpoints/signin-c4.md)** - Autenticação
+- **[Profile](docs/endpoints/profile-c4.md)** - Perfil do usuário
+
+### 📋 Templates
+
+- **[Template de Endpoint](docs/endpoints/endpoint-template.md)** - Para novos endpoints
+- **[Template de ADR](docs/adr-template.md)** - Para decisões arquiteturais
+
+## 🔌 API Endpoints
+
+| Método | Endpoint  | Descrição                   | Auth |
+| ------ | --------- | --------------------------- | ---- |
+| `POST` | `/signup` | Criação de conta de usuário | ❌   |
+| `POST` | `/signin` | Autenticação de usuário     | ❌   |
+| `GET`  | `/me`     | Perfil do usuário           | ✅   |
+
+## 🧪 Testes
+
+```bash
+npm test              # Executar testes
+npm run test:coverage # Com cobertura
 ```
 
 ## 🚀 Deploy
 
-Para fazer deploy da aplicação:
-
 ```bash
-serverless deploy
+npm run deploy        # Deploy para produção
 ```
 
-## Usage
+## 🤝 Contribuição
 
-### Deployment
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Add nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
-In order to deploy the example, you need to run the following command:
+---
 
-```
-serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```
-Deploying "serverless-http-api" to stage "dev" (us-east-1)
-
-✔ Service deployed to stack serverless-http-api-dev (91s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: serverless-http-api-dev-hello (1.6 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [HTTP API (API Gateway V2) event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
-
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
-
-Which should result in response similar to:
-
-```json
-{ "message": "Go Serverless v4! Your function executed successfully!" }
-```
-
-### Local development
-
-The easiest way to develop and test your function is to use the `dev` command:
-
-```
-serverless dev
-```
-
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
-
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
-
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+**Desenvolvido com ❤️ pela equipe FitFlavors**

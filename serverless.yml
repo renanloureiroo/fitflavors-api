@@ -18,6 +18,12 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN}
     ENCRYPT_SALTS: ${env:ENCRYPT_SALTS}
+  httpApi:
+    authorizers:
+      authorizer:
+        type: request
+        functionName: authorizer
+        resultTtlInSeconds: 300
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
   # domain: api.example.com
@@ -31,6 +37,9 @@ build:
     sourcemap: false
 
 functions:
+  authorizer:
+    handler: src/infra/functions/authorizer.handler
+
   signin:
     handler: src/infra/functions/signin.handler
     events:
@@ -44,3 +53,13 @@ functions:
       - httpApi:
           path: /signup
           method: post
+
+  profile:
+    handler: src/infra/functions/profile.handler
+    events:
+      - httpApi:
+          path: /me
+          method: get
+          authorizer:
+            name: authorizer
+            identitySource: $request.header.Authorization
