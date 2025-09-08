@@ -205,10 +205,12 @@ export class ProfileController {
 
 ## Referências
 
+- **[ADR-001: Serverless Architecture](./adr-001-serverless-architecture.md)** - Decisão sobre arquitetura serverless
+- **[Arquitetura Geral](../project-architecture.md)** - Visão geral da arquitetura
+- **[Profile Endpoint](../endpoints/profile-c4.md)** - Exemplo de implementação com autorização
 - [AWS API Gateway Request Authorizers](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-input.html)
 - [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
 - [Serverless Security Best Practices](https://serverless.com/framework/docs/providers/aws/guide/security/)
-- [ADR-001: Serverless Architecture](./adr-001-serverless-architecture.md)
 
 ---
 

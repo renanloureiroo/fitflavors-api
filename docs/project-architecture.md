@@ -2,48 +2,37 @@
 
 ## 🏗️ Visão Geral
 
-O FitFlavors API é uma aplicação serverless construída com **AWS Lambda** e **API Gateway**, seguindo os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)**. A aplicação é desenvolvida em **TypeScript** e utiliza **Drizzle ORM** para persistência de dados.
+API serverless para controle nutricional e fitness, construída com **AWS Lambda** e **API Gateway**, seguindo **Clean Architecture** e **DDD**.
 
-### 🎯 **Propósito**
+### 🎯 **Funcionalidades Principais**
 
-API para aplicação de controle nutricional e fitness, permitindo que usuários:
+- 🔐 **Autenticação JWT** com validação no API Gateway
+- 👤 **Gestão de usuários** com perfis completos
+- 🎯 **Cálculo de metas nutricionais** baseado em objetivos
+- 🔒 **Segurança robusta** com criptografia de senhas
 
-- Criem e gerenciem suas contas
-- Façam login de forma segura
-- Acessem seus perfis e dados pessoais
-- Calculem metas nutricionais baseadas em objetivos
-
-### 🏛️ **Arquitetura Geral**
-
-- **Padrão**: Clean Architecture + DDD
-- **Deployment**: Serverless (AWS Lambda + API Gateway)
-- **Banco de Dados**: PostgreSQL (Neon)
-- **Autenticação**: JWT com Lambda Authorizer
-- **ORM**: Drizzle ORM
-- **Runtime**: Node.js 22.x (ARM64)
-
-### 📊 **Endpoints Disponíveis**
-
-- `POST /signup` - Criação de conta de usuário
-- `POST /signin` - Autenticação de usuário
-- `GET /me` - Perfil do usuário (protegido)
-
-### 🔐 **Segurança**
-
-- Validação de JWT no API Gateway
-- Criptografia de senhas com bcrypt
-- Isolamento de funções Lambda
-- Políticas de autorização granulares
-
-## 🎯 Tecnologias Principais
+### 🏛️ **Stack Tecnológica**
 
 - **Runtime**: Node.js 22.x (ARM64)
 - **Framework**: Serverless Framework
-- **Cloud Provider**: AWS
+- **Cloud**: AWS (Lambda + API Gateway)
 - **Database**: Neon (PostgreSQL)
 - **ORM**: Drizzle ORM
-- **Authentication**: JWT + Lambda Authorizer
+- **Auth**: JWT + Lambda Authorizer
 - **Language**: TypeScript
+
+### 📊 **Endpoints da API**
+
+| Método | Endpoint  | Descrição         | Auth |
+| ------ | --------- | ----------------- | ---- |
+| `POST` | `/signup` | Criação de conta  | ❌   |
+| `POST` | `/signin` | Autenticação      | ❌   |
+| `GET`  | `/me`     | Perfil do usuário | ✅   |
+
+## 📊 **Estrutura de Dados**
+
+Para informações detalhadas sobre entidades e relacionamentos, consulte:
+**[ERD - Entity Relationship Diagram](./project/erd.md)**
 
 ## 📊 Diagrama de Arquitetura
 
@@ -146,235 +135,24 @@ sequenceDiagram
     AG-->>C: 200 OK + Profile data
 ```
 
-## 🏛️ Arquitetura de Camadas
+## 🏛️ **Arquitetura de Camadas**
 
-```mermaid
-graph TB
-    %% Camadas
-    subgraph "🌐 Presentation Layer"
-        Controllers[Controllers]
-        DTOs[DTOs]
-        Presenters[Presenters]
-    end
+Para detalhes sobre a organização de pastas e estrutura do código, consulte:
+**[Arquitetura de Pastas](./folder-architecture.md)**
 
-    subgraph "🎯 Domain Layer"
-        Entities[Entities]
-        UseCases[Use Cases]
-        Services[Domain Services]
-        Repositories[Repository Interfaces]
-        Errors[Domain Errors]
-    end
+## 🔐 **Sistema de Autenticação**
 
-    subgraph "🔧 Infrastructure Layer"
-        LambdaFunctions[Lambda Functions]
-        Database[Database Implementation]
-        Providers[External Providers]
-        Mappers[Data Mappers]
-    end
+Para detalhes sobre a estratégia de autenticação, consulte:
+**[ADR-002: Validação de Autenticação](./adrs/adr-002-authentication-validation.md)**
 
-    subgraph "⚙️ Core Layer"
-        BaseEntity[Base Entity]
-        Validation[Validation]
-        HTTP[HTTP Types]
-        Utils[Utilities]
-    end
+## 🚀 **Deploy e Infraestrutura**
 
-    %% Dependências
-    Controllers --> UseCases
-    Controllers --> DTOs
-    UseCases --> Entities
-    UseCases --> Services
-    UseCases --> Repositories
-    UseCases --> Errors
+- **Desenvolvimento**: Serverless Offline para testes locais
+- **Produção**: AWS Lambda + API Gateway + Neon Database
+- **Monitoramento**: CloudWatch Logs e métricas
+- **Deploy**: `npm run deploy` via Serverless Framework
 
-    LambdaFunctions --> Controllers
-    Database --> Repositories
-    Providers --> UseCases
-    Mappers --> Database
-
-    Entities --> BaseEntity
-    Controllers --> HTTP
-    UseCases --> Validation
-
-    %% Estilos
-    classDef presentation fill:#e3f2fd
-    classDef domain fill:#f1f8e9
-    classDef infrastructure fill:#fff3e0
-    classDef core fill:#fce4ec
-
-    class Controllers,DTOs,Presenters presentation
-    class Entities,UseCases,Services,Repositories,Errors domain
-    class LambdaFunctions,Database,Providers,Mappers infrastructure
-    class BaseEntity,Validation,HTTP,Utils core
-```
-
-## 🔐 Sistema de Autenticação
-
-```mermaid
-graph LR
-    %% Fluxo de autenticação
-    subgraph "🔑 Authentication Flow"
-        Login[User Login]
-        JWT[Generate JWT]
-        Token[Access Token]
-        Refresh[Refresh Token]
-    end
-
-    subgraph "🛡️ Authorization Flow"
-        Request[API Request]
-        Authorizer[Lambda Authorizer]
-        Validate[Validate JWT]
-        Policy[Return Policy]
-        Context[User Context]
-    end
-
-    Login --> JWT
-    JWT --> Token
-    JWT --> Refresh
-
-    Request --> Authorizer
-    Authorizer --> Validate
-    Validate --> Policy
-    Policy --> Context
-
-    %% Estilos
-    classDef auth fill:#e8f5e8
-    classDef authz fill:#ffebee
-
-    class Login,JWT,Token,Refresh auth
-    class Request,Authorizer,Validate,Policy,Context authz
-```
-
-## 📊 Estrutura de Dados
-
-### **Entidade User**
-
-```mermaid
-erDiagram
-    USER {
-        string id PK
-        string name
-        string email UK
-        string password_hash
-        string gender
-        string goal
-        date birth_date
-        number height
-        number weight
-        number activity_level
-        datetime created_at
-        datetime updated_at
-    }
-
-    USER ||--o{ MEAL : has
-    USER ||--o{ WORKOUT : has
-    USER ||--o{ GOAL : has
-```
-
-## 🚀 Deploy e Infraestrutura
-
-```mermaid
-graph TB
-    %% Ambiente de desenvolvimento
-    subgraph "💻 Development"
-        Local[Local Development]
-        ServerlessOffline[Serverless Offline]
-    end
-
-    %% Ambiente de produção
-    subgraph "☁️ Production"
-        APIGatewayProd[API Gateway]
-        LambdaProd[Lambda Functions]
-        DatabaseProd[Neon Database]
-        CloudWatch[CloudWatch Logs]
-    end
-
-    %% Deploy
-    Local -->|serverless deploy| APIGatewayProd
-    ServerlessOffline -->|Testing| Local
-
-    APIGatewayProd --> LambdaProd
-    LambdaProd --> DatabaseProd
-    LambdaProd --> CloudWatch
-
-    %% Estilos
-    classDef dev fill:#e8f5e8
-    classDef prod fill:#e3f2fd
-
-    class Local,ServerlessOffline dev
-    class APIGatewayProd,LambdaProd,DatabaseProd,CloudWatch prod
-```
-
-## 📈 Monitoramento e Observabilidade
-
-```mermaid
-graph TB
-    %% Métricas
-    subgraph "📊 Metrics"
-        APIMetrics[API Gateway Metrics]
-        LambdaMetrics[Lambda Metrics]
-        DatabaseMetrics[Database Metrics]
-    end
-
-    %% Logs
-    subgraph "📝 Logs"
-        CloudWatchLogs[CloudWatch Logs]
-        ErrorLogs[Error Tracking]
-        AccessLogs[Access Logs]
-    end
-
-    %% Alertas
-    subgraph "🚨 Alerts"
-        ErrorAlerts[Error Alerts]
-        PerformanceAlerts[Performance Alerts]
-        SecurityAlerts[Security Alerts]
-    end
-
-    APIMetrics --> CloudWatchLogs
-    LambdaMetrics --> ErrorLogs
-    DatabaseMetrics --> AccessLogs
-
-    CloudWatchLogs --> ErrorAlerts
-    ErrorLogs --> PerformanceAlerts
-    AccessLogs --> SecurityAlerts
-
-    %% Estilos
-    classDef metrics fill:#fff3e0
-    classDef logs fill:#e8f5e8
-    classDef alerts fill:#ffebee
-
-    class APIMetrics,LambdaMetrics,DatabaseMetrics metrics
-    class CloudWatchLogs,ErrorLogs,AccessLogs logs
-    class ErrorAlerts,PerformanceAlerts,SecurityAlerts alerts
-```
-
-## 🎯 Benefícios da Arquitetura
-
-### **Escalabilidade**
-
-- ✅ Auto-scaling com AWS Lambda
-- ✅ Gerenciamento automático de recursos
-- ✅ Pay-per-use pricing model
-
-### **Segurança**
-
-- ✅ JWT com validação no API Gateway
-- ✅ Isolamento de funções Lambda
-- ✅ Criptografia de senhas com bcrypt
-
-### **Manutenibilidade**
-
-- ✅ Clean Architecture
-- ✅ Separação clara de responsabilidades
-- ✅ Código testável e modular
-
-### **Performance**
-
-- ✅ Validação de token no gateway
-- ✅ Cache de políticas de autorização
-- ✅ Otimização com ARM64
-
-## 🔧 Configuração de Ambiente
+## 🔧 **Configuração**
 
 ### **Variáveis de Ambiente**
 
@@ -392,17 +170,16 @@ npm run dev          # Desenvolvimento local
 npm run lint         # Linting
 npm run format       # Formatação
 npm run type-check   # Verificação de tipos
-npm run check        # Verificação completa
+npm run deploy       # Deploy para produção
 ```
 
-## 📚 Próximos Passos
+## 📚 **Documentação Relacionada**
 
-1. **Implementar testes automatizados**
-2. **Adicionar CI/CD pipeline**
-3. **Implementar rate limiting**
-4. **Adicionar cache Redis**
-5. **Implementar observabilidade avançada**
+- **[ERD - Diagrama de Entidades](./project/erd.md)** - Estrutura do banco de dados
+- **[Arquitetura de Pastas](./folder-architecture.md)** - Organização do código
+- **[Decisões Arquiteturais](./adrs/)** - ADRs documentando escolhas técnicas
+- **[Endpoints da API](./endpoints/)** - Documentação dos endpoints
 
 ---
 
-**Nota:** Esta arquitetura foi projetada para ser escalável, segura e fácil de manter, seguindo as melhores práticas de desenvolvimento serverless.
+**📅 Atualizado**: 2024-12-19 | **👥 Equipe**: FitFlavors Development

@@ -293,3 +293,12 @@ graph LR
 - Latência da Lambda: < 200ms
 - Latência total: < 300ms
 - Throughput: 1000+ req/s
+
+## 📚 Referências
+
+- **[ERD - Entity Relationship Diagram](../project/erd.md)** - Diagrama de entidades e relacionamentos
+- **[Arquitetura Geral](../project-architecture.md)** - Visão geral da arquitetura
+- **[ADR-002: Autenticação](../adrs/adr-002-authentication-validation.md)** - Estratégia de autenticação
+- **Schema do Banco**: `src/infra/db/drizzle/schema.ts`
+- **Entidade User**: `src/domain/users/entities/user.ts`
+- **Repository User**: `src/domain/users/repositories/user.repository.ts`

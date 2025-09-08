@@ -239,3 +239,12 @@ const schema = z.object({
 3. **Captcha** para prevenir spam
 4. **Logs de auditoria** mais detalhados
 5. **Métricas de negócio** (conversão, abandono)
+
+## 📚 Referências
+
+- **[ERD - Entity Relationship Diagram](../project/erd.md)** - Diagrama de entidades e relacionamentos
+- **[Arquitetura Geral](../project-architecture.md)** - Visão geral da arquitetura
+- **[ADR-001: Arquitetura Serverless](../adrs/adr-001-serverless-architecture.md)** - Decisão sobre arquitetura
+- **Entidade User**: `src/domain/users/entities/user.ts`
+- **Create Account Usecase**: `src/domain/users/usecases/create-account.usecase.ts`
+- **Calculate Goal Service**: `src/domain/users/services/calculate-goal.ts`

@@ -145,6 +145,9 @@ src/
 
 ## Referências
 
+- **[Arquitetura Geral](../project-architecture.md)** - Visão detalhada da arquitetura implementada
+- **[Arquitetura de Pastas](../folder-architecture.md)** - Organização do código
+- **[ERD - Entity Relationship Diagram](../project/erd.md)** - Diagrama de entidades e relacionamentos
 - [AWS Lambda Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
 - [Serverless Framework Documentation](https://www.serverless.com/framework/docs/)
 - [Clean Architecture - Robert Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)

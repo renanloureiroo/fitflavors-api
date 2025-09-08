@@ -57,23 +57,35 @@ npm run type-check   # Verificação de tipos
 
 ## 📚 Documentação
 
-### 🏗️ Arquitetura
+> **🎯 Ponto de entrada**: Toda documentação está organizada em [docs/](docs/) com navegação intuitiva
 
-- **[Arquitetura do Projeto](docs/project-architecture.md)** - Visão geral e diagramas
-- **[Arquitetura de Pastas](docs/folder-architecture.md)** - Organização do código
-- **[ADR-001: Serverless](docs/adrs/adr-001-serverless-architecture.md)** - Decisão arquitetural
-- **[ADR-002: Autenticação](docs/adrs/adr-002-authentication-validation.md)** - Validação de JWT
+### 🚀 **Começar Aqui**
 
-### 🔌 Endpoints (C4 Model)
+| Para...                 | Comece por                                                   | Descrição                          |
+| ----------------------- | ------------------------------------------------------------ | ---------------------------------- |
+| **Desenvolvedores**     | [docs/README.md](docs/README.md)                             | Guia completo de desenvolvimento   |
+| **Arquitetos**          | [docs/project-architecture.md](docs/project-architecture.md) | Visão arquitetural do sistema      |
+| **Novos Colaboradores** | [docs/project/README.md](docs/project/README.md)             | Documentação específica do projeto |
 
-- **[Sign Up](docs/endpoints/signup-c4.md)** - Criação de conta
-- **[Sign In](docs/endpoints/signin-c4.md)** - Autenticação
-- **[Profile](docs/endpoints/profile-c4.md)** - Perfil do usuário
+### 🏗️ **Arquitetura & Estrutura**
 
-### 📋 Templates
+- **[Visão Geral](docs/project-architecture.md)** - Arquitetura serverless, tecnologias e fluxos
+- **[Estrutura do Código](docs/folder-architecture.md)** - Organização de pastas e responsabilidades
+- **[Decisões Arquiteturais](docs/adrs/)** - ADRs documentando escolhas técnicas
 
-- **[Template de Endpoint](docs/endpoints/endpoint-template.md)** - Para novos endpoints
-- **[Template de ADR](docs/adr-template.md)** - Para decisões arquiteturais
+### 📊 **Dados & Entidades**
+
+- **[ERD - Diagrama de Entidades](docs/project/erd.md)** - Estrutura do banco de dados e relacionamentos
+
+### 🔌 **Endpoints da API**
+
+- **[Sign Up](docs/endpoints/signup-c4.md)** - Criação de conta de usuário
+- **[Sign In](docs/endpoints/signin-c4.md)** - Autenticação de usuário
+- **[Profile](docs/endpoints/profile-c4.md)** - Perfil do usuário (protegido)
+
+### 📝 **Templates & Padrões**
+
+- **[Templates](docs/templates/)** - Modelos para ADRs, endpoints e PRs
 
 ## 🔌 API Endpoints
 

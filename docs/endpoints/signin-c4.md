@@ -250,3 +250,12 @@ const schema = z.object({
 5. **Sessões** com controle de dispositivos
 6. **Logs de segurança** mais detalhados
 7. **Blacklist** de IPs suspeitos
+
+## 📚 Referências
+
+- **[ERD - Entity Relationship Diagram](../project/erd.md)** - Diagrama de entidades e relacionamentos
+- **[Arquitetura Geral](../project-architecture.md)** - Visão geral da arquitetura
+- **[ADR-002: Autenticação](../adrs/adr-002-authentication-validation.md)** - Estratégia de autenticação
+- **Entidade User**: `src/domain/users/entities/user.ts`
+- **Sign In Usecase**: `src/domain/users/usecases/sign-in.usecase.ts`
+- **JWT Provider**: `src/infra/providers/jwt.provider.ts`

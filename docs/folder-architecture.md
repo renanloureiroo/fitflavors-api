@@ -184,40 +184,20 @@ Functions Controllers
 - `.provider.ts` - Provedores de serviços
 - `.repository.ts` - Repositórios
 
-## 🎯 Benefícios desta Organização
+## 🎯 **Benefícios**
 
-### **Separação de Responsabilidades**
+- **Separação de Responsabilidades**: Cada camada tem função específica
+- **Testabilidade**: Regras de negócio isoladas e fáceis de testar
+- **Escalabilidade**: Fácil adição de novos agregados
+- **Manutenibilidade**: Código organizado e previsível
 
-- Cada camada tem uma responsabilidade específica
-- Fácil localização de código
-- Manutenção simplificada
+## 📚 **Documentação Relacionada**
 
-### **Testabilidade**
-
-- Regras de negócio isoladas
-- Fácil mock de dependências
-- Testes unitários e de integração
-
-### **Escalabilidade**
-
-- Fácil adição de novos agregados
-- Reutilização de código compartilhado
-- Evolução independente das camadas
-
-### **Manutenibilidade**
-
-- Código organizado e previsível
-- Fácil onboarding de novos desenvolvedores
-- Refatoração segura
-
-## 🚀 Próximos Passos
-
-1. **Adicionar novos agregados** seguindo o padrão `users/`
-2. **Implementar containers** para injeção de dependências
-3. **Adicionar testes** para cada camada
-4. **Documentar APIs** com OpenAPI/Swagger
-5. **Implementar logging** centralizado
+- **[Arquitetura Geral](./project-architecture.md)** - Visão geral da arquitetura serverless
+- **[ERD - Diagrama de Entidades](./project/erd.md)** - Estrutura do banco de dados
+- **[Decisões Arquiteturais](./adrs/)** - ADRs documentando escolhas técnicas
+- **[Endpoints da API](./endpoints/)** - Documentação dos endpoints
 
 ---
 
-**Nota:** Esta arquitetura segue os princípios SOLID e Clean Architecture, garantindo código limpo, testável e manutenível.
+**📅 Atualizado**: 2024-12-19 | **👥 Equipe**: FitFlavors Development
