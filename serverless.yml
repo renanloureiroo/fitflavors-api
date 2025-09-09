@@ -24,6 +24,7 @@ provider:
         type: request
         functionName: authorizer
         resultTtlInSeconds: 300
+        identitySource: $request.header.Authorization
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
   # domain: api.example.com
@@ -62,7 +63,6 @@ functions:
           method: get
           authorizer:
             name: authorizer
-            identitySource: $request.header.Authorization
 
   meal:
     handler: src/infra/functions/meal.handler
@@ -72,7 +72,6 @@ functions:
           method: post
           authorizer:
             name: authorizer
-            identitySource: $request.header.Authorization
 
   listMeals:
     handler: src/infra/functions/list-meals.handler
@@ -82,7 +81,6 @@ functions:
           method: get
           authorizer:
             name: authorizer
-            identitySource: $request.header.Authorization
 
   fetchMealById:
     handler: src/infra/functions/fetch-meal.handler
@@ -92,4 +90,3 @@ functions:
           method: get
           authorizer:
             name: authorizer
-            identitySource: $request.header.Authorization

@@ -5,6 +5,7 @@ import {
 } from '@/domain/meals/entities/meal';
 import { meals } from '../schema';
 import { UniqueEntityId } from '@/core/unique-entity-id';
+import { toUTC } from '@/core/utils/date-utils';
 
 type DrizzleMeal = typeof meals.$inferSelect;
 
@@ -19,8 +20,8 @@ export class DrizzleMealMapper {
       inputFileKey: raw.inputFileKey,
       foods: raw.foods as Array<unknown>,
 
-      createdAt: raw.createdAt,
-      updatedAt: raw.updatedAt,
+      createdAt: toUTC(raw.createdAt),
+      updatedAt: toUTC(raw.updatedAt),
     });
   }
 
@@ -34,8 +35,8 @@ export class DrizzleMealMapper {
       inputType: meal.inputType,
       inputFileKey: meal.inputFileKey,
       foods: meal.foods as Array<unknown>,
-      createdAt: meal.createdAt,
-      updatedAt: meal.updatedAt,
+      createdAt: toUTC(meal.createdAt),
+      updatedAt: toUTC(meal.updatedAt),
     };
   }
 }

@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entitiy';
 import { Optional } from '@/core/optional';
 import { UniqueEntityId } from '@/core/unique-entity-id';
+import { nowUTC } from '@/core/utils/date-utils';
 
 export enum InputTypeEnum {
   AUDIO = 'audio',
@@ -36,8 +37,8 @@ export class Meal extends Entity<MealProps> {
       {
         ...data,
         status: data.status ?? MealStatusEnum.UPLOADING,
-        createdAt: data.createdAt ?? new Date(),
-        updatedAt: data.updatedAt ?? new Date(),
+        createdAt: data.createdAt ?? nowUTC(),
+        updatedAt: data.updatedAt ?? nowUTC(),
       },
       id ?? new UniqueEntityId()
     );
@@ -115,6 +116,6 @@ export class Meal extends Entity<MealProps> {
   }
 
   private touch() {
-    this.props.updatedAt = new Date();
+    this.props.updatedAt = nowUTC();
   }
 }

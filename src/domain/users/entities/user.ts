@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entitiy';
 import { Optional } from '@/core/optional';
 import { UniqueEntityId } from '@/core/unique-entity-id';
+import { nowUTC } from '@/core/utils/date-utils';
 
 export type Gender = 'male' | 'female';
 
@@ -52,8 +53,8 @@ class User extends Entity<UserProps> {
         proteins: data.proteins ?? 0,
         carbohydrates: data.carbohydrates ?? 0,
         fats: data.fats ?? 0,
-        createdAt: data.createdAt ?? new Date(),
-        updatedAt: data.updatedAt ?? new Date(),
+        createdAt: data.createdAt ?? nowUTC(),
+        updatedAt: data.updatedAt ?? nowUTC(),
       },
       id ?? new UniqueEntityId()
     );
@@ -179,7 +180,7 @@ class User extends Entity<UserProps> {
   }
 
   private touch() {
-    this.props.updatedAt = new Date();
+    this.props.updatedAt = nowUTC();
   }
 }
 

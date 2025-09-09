@@ -1,6 +1,7 @@
 import { Gender, Goal, User } from '@/domain/users/entities/user';
 import { users } from '../schema';
 import { UniqueEntityId } from '@/core/unique-entity-id';
+import { toUTC } from '@/core/utils/date-utils';
 
 type DrizzleUser = typeof users.$inferSelect;
 
@@ -13,7 +14,7 @@ export class DrizzleUserMapper {
         password: raw.password,
         gender: raw.gender as Gender,
         goal: raw.goal as Goal,
-        birthDate: new Date(raw.birthDate),
+        birthDate: toUTC(new Date(raw.birthDate)),
         height: raw.height,
         weight: raw.weight,
         activityLevel: raw.activityLevel,
@@ -42,8 +43,8 @@ export class DrizzleUserMapper {
       proteins: user.proteins,
       carbohydrates: user.carbohydrates,
       fats: user.fats,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      createdAt: toUTC(user.createdAt),
+      updatedAt: toUTC(user.updatedAt),
     };
   }
 }
