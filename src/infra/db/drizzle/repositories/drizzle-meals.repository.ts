@@ -9,16 +9,27 @@ import { startOfDayUTC, endOfDayUTC } from '@/core/utils/date-utils';
 
 export class DrizzleMealsRepository implements MealsRepository {
   async findByInputFileKey(fileKey: string): Promise<Meal | null> {
-    const meal = (
-      await db.select().from(meals).where(eq(meals.inputFileKey, fileKey))
-    ).at(0);
+    const result = await db
+      .select()
+      .from(meals)
+      .where(eq(meals.inputFileKey, fileKey));
+    const meal = result.at(0);
 
-    return meal ? DrizzleMealMapper.toDomain(meal) : null;
+    if (!meal) {
+      return null;
+    }
+
+    return DrizzleMealMapper.toDomain(meal);
   }
   async findById(id: string): Promise<Meal | null> {
-    const meal = (await db.select().from(meals).where(eq(meals.id, id))).at(0);
+    const result = await db.select().from(meals).where(eq(meals.id, id));
+    const meal = result.at(0);
 
-    return meal ? DrizzleMealMapper.toDomain(meal) : null;
+    if (!meal) {
+      return null;
+    }
+
+    return DrizzleMealMapper.toDomain(meal);
   }
   async findByUserId(userId: string): Promise<Meal[]> {
     const result = (
@@ -53,14 +64,17 @@ export class DrizzleMealsRepository implements MealsRepository {
   }
 
   async findByIdAndUserId(id: string, userId: string): Promise<Meal | null> {
-    const meal = (
-      await db
-        .select()
-        .from(meals)
-        .where(and(eq(meals.id, id), eq(meals.userId, userId)))
-    ).at(0);
+    const result = await db
+      .select()
+      .from(meals)
+      .where(and(eq(meals.id, id), eq(meals.userId, userId)));
+    const meal = result.at(0);
 
-    return meal ? DrizzleMealMapper.toDomain(meal) : null;
+    if (!meal) {
+      return null;
+    }
+
+    return DrizzleMealMapper.toDomain(meal);
   }
 
   async save(meal: Meal): Promise<Meal> {

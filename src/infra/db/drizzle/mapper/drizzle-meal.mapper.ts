@@ -12,13 +12,13 @@ type DrizzleMeal = typeof meals.$inferSelect;
 export class DrizzleMealMapper {
   static toDomain(raw: DrizzleMeal): Meal {
     return Meal.create({
-      name: raw.name,
-      icon: raw.icon,
+      name: raw.name ?? '',
+      icon: raw.icon ?? '',
       userId: new UniqueEntityId(raw.userId),
       status: raw.status as MealStatusEnum,
       inputType: raw.inputType as InputTypeEnum,
-      inputFileKey: raw.inputFileKey,
-      foods: raw.foods as Array<unknown>,
+      inputFileKey: raw.inputFileKey ?? '',
+      foods: (raw.foods as Array<unknown>) ?? [],
 
       createdAt: toUTC(raw.createdAt),
       updatedAt: toUTC(raw.updatedAt),
