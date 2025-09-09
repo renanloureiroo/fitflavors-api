@@ -10,16 +10,19 @@ export class ProcessMealController {
     if (!meal) {
       throw new AppError('Meal not found', 404);
     }
+    console.log('meal', meal);
 
     if (
       meal.status === MealStatusEnum.FAILED ||
       meal.status === MealStatusEnum.SUCCESS
     ) {
+      console.log('meal already processed');
       return;
     }
 
     meal.status = MealStatusEnum.PROCESSING;
     await mealRepository.update(meal);
+    console.log('meal updated');
 
     try {
       // TODO: IA Process Meal
@@ -37,6 +40,7 @@ export class ProcessMealController {
         },
       ];
       await mealRepository.update(meal);
+      console.log('meal updated');
       return;
     } catch {
       meal.status = MealStatusEnum.FAILED;
