@@ -83,3 +83,13 @@ functions:
           authorizer:
             name: authorizer
             identitySource: $request.header.Authorization
+
+  fetchMeal:
+    handler: src/infra/functions/fetch-meal.handler
+    events:
+      - httpApi:
+          path: /meals/{id}
+          method: get
+          authorizer:
+            name: authorizer
+            identitySource: $request.header.Authorization

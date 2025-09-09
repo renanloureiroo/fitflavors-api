@@ -1,4 +1,5 @@
 import z from 'zod';
+import { MealResponseDTO } from './meal-response.dto';
 
 export const listMealsSchema = z.object({
   date: z.iso.date(),
@@ -7,15 +8,5 @@ export const listMealsSchema = z.object({
 export type ListMealsDTO = z.infer<typeof listMealsSchema>;
 
 export type ListMealsResponseDTO = {
-  meals: Array<{
-    id: string;
-    name: string;
-    icon: string;
-    userId: string;
-    status: string;
-    inputType: string;
-    inputFileKey: string;
-    foods: Array<unknown>;
-    createdAt: Date;
-  }>;
+  meals: Array<MealResponseDTO>;
 };

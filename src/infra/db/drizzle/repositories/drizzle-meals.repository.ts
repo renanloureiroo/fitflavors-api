@@ -1,4 +1,4 @@
-import { Meal } from '@/domain/meals/entities/meal';
+import { Meal, MealStatusEnum } from '@/domain/meals/entities/meal';
 import { MealsRepository } from '@/domain/meals/repositories/meals.repository';
 
 import { db } from '..';
@@ -19,7 +19,11 @@ export class DrizzleMealsRepository implements MealsRepository {
 
     return result;
   }
-  async findByUserIdAndDate(userId: string, date: string): Promise<Meal[]> {
+  async findByUserIdAndDateAndStatus(
+    userId: string,
+    date: string,
+    status: MealStatusEnum
+  ): Promise<Meal[]> {
     const startDate = new Date(date);
     const endDate = new Date(date);
     endDate.setDate(endDate.getDate() + 1);
@@ -31,6 +35,7 @@ export class DrizzleMealsRepository implements MealsRepository {
         .where(
           and(
             eq(meals.userId, userId),
+            eq(meals.status, status),
             gte(meals.createdAt, startDate),
             lt(meals.createdAt, endDate)
           )
@@ -38,6 +43,17 @@ export class DrizzleMealsRepository implements MealsRepository {
     ).map(DrizzleMealMapper.toDomain);
 
     return result;
+  }
+
+  async findByIdAndUserId(id: string, userId: string): Promise<Meal | null> {
+    const meal = (
+      await db
+        .select()
+        .from(meals)
+        .where(and(eq(meals.id, id), eq(meals.userId, userId)))
+    ).at(0);
+
+    return meal ? DrizzleMealMapper.toDomain(meal) : null;
   }
 
   async save(meal: Meal): Promise<Meal> {
