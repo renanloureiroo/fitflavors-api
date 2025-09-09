@@ -1,4 +1,4 @@
-export type CreateAccountResponseDTO = {
+export type TokensResponseDTO = {
   accessToken: string;
   refreshToken: string;
 };

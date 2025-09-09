@@ -4,7 +4,7 @@ import { HttpHandler } from '@/core/http/http-handler';
 import { UserPresenter } from '../presenters/user.presenter';
 import { FetchProfileUsecase } from '../usecases/fetch-profile.usecase';
 import { DrizzleUserRepository } from '@/infra/db/drizzle/repositories/drizzle-user.repository';
-import { FetchProfileResponseDTO } from '../dtos/fetch-profile-response.dto';
+import { FetchProfileResponseDTO } from '../dtos/fetch-profile.dto';
 
 export class ProfileController {
   static async handle(request: HttpRequest) {

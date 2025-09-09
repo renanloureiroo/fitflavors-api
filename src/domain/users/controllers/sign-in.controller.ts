@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { HttpHandler } from '@/core/http/http-handler';
 import { HttpRequest, HttpResponse } from '@/core/http/types/http';
 import { SignInUsecase } from '../usecases/sign-in.usecase';
@@ -6,15 +5,12 @@ import { DrizzleUserRepository } from '@/infra/db/drizzle/repositories/drizzle-u
 import { JwtProviderImpl } from '@/infra/providers/jwt.provider';
 import { PasswordProviderImpl } from '@/infra/providers/password.provider';
 import { HandlerAppError } from '@/core/utils/handler-app-error';
-import { LoginResponseDTO } from '../dtos/login-response.dto';
+import {
+  LoginResponseDTO,
+  schema,
+  SignInRequest,
+} from '../dtos/login-response.dto';
 import { Valid } from '@/core/decorators/valid.decorator';
-
-const schema = z.object({
-  email: z.email(),
-  password: z.string().min(8),
-});
-
-export type SignInRequest = z.infer<typeof schema>;
 
 export class SignInController {
   static async handle(
@@ -24,8 +20,6 @@ export class SignInController {
     try {
       const { email, password } = request.body;
 
-      // Aqui você deve injetar as dependências adequadamente
-      // Por enquanto, estou criando instâncias diretamente
       const userRepository = new DrizzleUserRepository();
       const jwtProvider = new JwtProviderImpl();
       const passwordProvider = new PasswordProviderImpl();
