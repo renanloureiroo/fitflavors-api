@@ -35,9 +35,6 @@ export class CreateMealUsecase {
       userId: new UniqueEntityId(data.userId),
       inputType: this.getInputType(data.fileType),
       inputFileKey: fileKey,
-      foods: [],
-      name: '',
-      icon: '',
     });
     await this.mealsRepository.save(meal);
 

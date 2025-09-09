@@ -11,30 +11,33 @@ type DrizzleMeal = typeof meals.$inferSelect;
 
 export class DrizzleMealMapper {
   static toDomain(raw: DrizzleMeal): Meal {
-    return Meal.create({
-      name: raw.name ?? '',
-      icon: raw.icon ?? '',
-      userId: new UniqueEntityId(raw.userId),
-      status: raw.status as MealStatusEnum,
-      inputType: raw.inputType as InputTypeEnum,
-      inputFileKey: raw.inputFileKey ?? '',
-      foods: (raw.foods as Array<unknown>) ?? [],
+    return Meal.create(
+      {
+        name: raw.name,
+        icon: raw.icon,
+        userId: new UniqueEntityId(raw.userId),
+        status: raw.status as MealStatusEnum,
+        inputType: raw.inputType as InputTypeEnum,
+        inputFileKey: raw.inputFileKey ?? '',
+        foods: (raw.foods as Array<unknown>) ?? [],
 
-      createdAt: toUTC(raw.createdAt),
-      updatedAt: toUTC(raw.updatedAt),
-    });
+        createdAt: toUTC(raw.createdAt),
+        updatedAt: toUTC(raw.updatedAt),
+      },
+      new UniqueEntityId(raw.id)
+    );
   }
 
   static toPersistence(meal: Meal): DrizzleMeal {
     return {
       id: meal.id.toValue(),
-      name: meal?.name ?? '',
-      icon: meal?.icon ?? '',
+      name: meal.name || null,
+      icon: meal.icon || null,
       userId: meal.userId.toValue(),
       status: meal.status,
       inputType: meal.inputType,
-      inputFileKey: meal.inputFileKey,
-      foods: (meal?.foods as Array<unknown>) ?? [],
+      inputFileKey: meal.inputFileKey || '',
+      foods: (meal.foods as Array<unknown>) || [],
       createdAt: toUTC(meal.createdAt),
       updatedAt: toUTC(meal.updatedAt),
     };

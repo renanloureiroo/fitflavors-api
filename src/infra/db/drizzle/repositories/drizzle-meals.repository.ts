@@ -78,23 +78,36 @@ export class DrizzleMealsRepository implements MealsRepository {
   }
 
   async save(meal: Meal): Promise<Meal> {
-    const result = (
-      await db
-        .insert(meals)
-        .values(DrizzleMealMapper.toPersistence(meal))
-        .returning()
-    ).at(0);
+    const result = await db
+      .insert(meals)
+      .values(DrizzleMealMapper.toPersistence(meal))
+      .returning();
 
-    return DrizzleMealMapper.toDomain(result!);
+    const savedMeal = result.at(0);
+    if (!savedMeal) {
+      throw new Error('Failed to save meal - no record returned');
+    }
+
+    return DrizzleMealMapper.toDomain(savedMeal);
   }
 
   async update(meal: Meal): Promise<Meal> {
+    const persistence = DrizzleMealMapper.toPersistence(meal);
+    console.log('persistence', persistence);
+
     const result = await db
       .update(meals)
-      .set(DrizzleMealMapper.toPersistence(meal))
+      .set(persistence)
       .where(eq(meals.id, meal.id.toValue()))
       .returning();
 
-    return DrizzleMealMapper.toDomain(result.at(0)!);
+    console.log('update result:', result);
+
+    const updatedMeal = result.at(0);
+    if (!updatedMeal) {
+      throw new Error(`Meal with id ${meal.id.toValue()} not found for update`);
+    }
+
+    return DrizzleMealMapper.toDomain(updatedMeal);
   }
 }

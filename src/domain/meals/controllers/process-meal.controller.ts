@@ -21,6 +21,7 @@ export class ProcessMealController {
     }
 
     meal.status = MealStatusEnum.PROCESSING;
+    console.log('meal updated');
     await mealRepository.update(meal);
     console.log('meal updated');
 

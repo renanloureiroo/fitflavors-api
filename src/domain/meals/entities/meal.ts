@@ -16,8 +16,8 @@ export enum MealStatusEnum {
 }
 
 type MealProps = {
-  name: string;
-  icon: string;
+  name: string | null;
+  icon: string | null;
   userId: UniqueEntityId;
   status: MealStatusEnum;
   inputType: InputTypeEnum;
@@ -29,13 +29,19 @@ type MealProps = {
 
 export class Meal extends Entity<MealProps> {
   static create(
-    data: Optional<MealProps, 'status' | 'createdAt' | 'updatedAt'>,
+    data: Optional<
+      MealProps,
+      'name' | 'icon' | 'foods' | 'status' | 'createdAt' | 'updatedAt'
+    >,
     id?: UniqueEntityId
   ): Meal {
     return new Meal(
       {
         ...data,
-        status: data.status ?? MealStatusEnum.UPLOADING,
+        name: data?.name ?? null,
+        icon: data?.icon ?? null,
+        foods: data?.foods ?? [],
+        status: data?.status ?? MealStatusEnum.UPLOADING,
         createdAt: data.createdAt ?? nowUTC(),
         updatedAt: data.updatedAt ?? nowUTC(),
       },
@@ -47,7 +53,7 @@ export class Meal extends Entity<MealProps> {
     return this.props.name;
   }
 
-  set name(value: string) {
+  set name(value: string | null) {
     this.props.name = value;
     this.touch();
   }
@@ -56,7 +62,7 @@ export class Meal extends Entity<MealProps> {
     return this.props.icon;
   }
 
-  set icon(value: string) {
+  set icon(value: string | null) {
     this.props.icon = value;
     this.touch();
   }
