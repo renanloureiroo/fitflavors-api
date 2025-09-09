@@ -6,6 +6,8 @@ const schema = z.object({
   JWT_SECRET: z.string(),
   JWT_EXPIRES_IN: z.string(),
   ENCRYPT_SALTS: z.string(),
+  // AWS S3 Configuration
+  AWS_S3_BUCKET_NAME: z.string().optional(),
 });
 
 export const env = schema.parse(process.env);

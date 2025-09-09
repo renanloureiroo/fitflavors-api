@@ -1,34 +1,63 @@
 import { UniqueEntityId } from '@/core/unique-entity-id';
-import { CreateMealDTO } from '../dtos/create-meal.dto';
+import { CreateMealDTO, FileType } from '../dtos/create-meal.dto';
 import { InputTypeEnum, Meal } from '../entities/meal';
 import { MealsRepository } from '../repositories/meals.repository';
+import { StorageGateway } from '../gateways/storage.gateway';
+
+type CreateMealResult = {
+  meal: Meal;
+  signedUrl: string;
+};
 
 export class CreateMealUsecase {
-  constructor(private readonly mealsRepository: MealsRepository) {}
+  constructor(
+    private readonly mealsRepository: MealsRepository,
+    private readonly storageGateway: StorageGateway
+  ) {}
 
-  async execute(data: CreateMealDTO): Promise<Meal> {
-    const meal = await this.createMeal(data);
+  async execute(data: CreateMealDTO): Promise<CreateMealResult> {
+    const { meal, signedUrl } = await this.createMeal(data);
 
-    return meal;
+    return { meal, signedUrl };
   }
 
-  private async createMeal(data: CreateMealDTO): Promise<Meal> {
+  private async createMeal(data: CreateMealDTO): Promise<CreateMealResult> {
+    const fileKey = this.getFileKey(data.fileType);
+
+    const signedUrl = await this.uploadFile(fileKey);
+
     const meal = Meal.create({
       userId: new UniqueEntityId(data.userId),
       inputType: this.getInputType(data.fileType),
-      inputFileKey: 'input_file_key',
+      inputFileKey: fileKey,
       foods: [],
       name: '',
       icon: '',
     });
     await this.mealsRepository.save(meal);
 
-    return meal;
+    return { meal, signedUrl };
   }
 
-  private getInputType(fileType: string): InputTypeEnum {
+  private getInputType(fileType: FileType): InputTypeEnum {
     return fileType === 'audio/m4a'
       ? InputTypeEnum.AUDIO
       : InputTypeEnum.PICTURE;
+  }
+
+  private getFileKey(fileType: FileType): string {
+    const fileId = new UniqueEntityId();
+
+    const ext = fileType === 'audio/m4a' ? '.m4a' : '.jpeg';
+
+    return `${fileId.toString()}${ext}`;
+  }
+
+  private async uploadFile(fileKey: string): Promise<string> {
+    await this.storageGateway.uploadFile(fileKey);
+
+    const signedUrl = await this.storageGateway.getSignedUrl(fileKey);
+
+    return signedUrl;
   }
 }

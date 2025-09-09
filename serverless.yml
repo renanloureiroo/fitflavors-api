@@ -10,14 +10,36 @@ plugins:
 
 provider:
   name: aws
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
   runtime: nodejs22.x
   architecture: arm64
+  logRetentionInDays: 14
   environment:
     DATABASE_URL: ${env:DATABASE_URL}
     JWT_SECRET: ${env:JWT_SECRET}
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN}
     ENCRYPT_SALTS: ${env:ENCRYPT_SALTS}
+    AWS_S3_BUCKET_NAME: !Ref UploadsBucket
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource: !Sub ${UploadsBucket.Arn}/*
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:TagResource
+          Resource:
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${self:service}-${self:provider.stage}-*'
+        - Effect: Allow
+          Action:
+            - logs:PutLogEvents
+          Resource:
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${self:service}-${self:provider.stage}-*:*'
   httpApi:
     authorizers:
       authorizer:
@@ -90,3 +112,10 @@ functions:
           method: get
           authorizer:
             name: authorizer
+
+resources:
+  Resources:
+    UploadsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-${self:provider.stage}-uploads

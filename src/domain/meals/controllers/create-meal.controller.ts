@@ -10,21 +10,24 @@ import {
   CreateMealResponseDTO,
   schema,
 } from '../dtos/create-meal.dto';
+import { S3StorageGateway } from '@/infra/gateways/s3-storage.gateway';
 
 export class CreateMealController {
   static async handle(@Valid(schema) request: HttpRequest<CreateMealRequest>) {
     const { userId } = request.context;
 
     const createMealUsecase = new CreateMealUsecase(
-      new DrizzleMealsRepository()
+      new DrizzleMealsRepository(),
+      new S3StorageGateway()
     );
-    const meal = await createMealUsecase.execute({
+    const { meal, signedUrl } = await createMealUsecase.execute({
       userId,
       fileType: request.body.fileType,
     });
 
     return HttpHandler.created<CreateMealResponseDTO>({
       meal: MealPresenter.toHTTP(meal),
+      signedUrl: signedUrl,
     });
   }
 }

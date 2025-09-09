@@ -7,11 +7,14 @@ export const schema = z.object({
 
 export type CreateMealRequest = z.infer<typeof schema>;
 
+export type FileType = 'audio/m4a' | 'image/jpeg';
+
 export type CreateMealDTO = {
-  fileType: 'audio/m4a' | 'image/jpeg';
+  fileType: FileType;
   userId: string;
 };
 
 export type CreateMealResponseDTO = {
   meal: MealResponseDTO;
+  signedUrl: string;
 };
