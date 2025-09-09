@@ -1,8 +1,4 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl as getSignedUrlPresigner } from '@aws-sdk/s3-request-presigner';
 import { env } from '../env';
 import { StorageGateway } from '@/domain/meals/gateways/storage.gateway';
@@ -37,7 +33,7 @@ export class S3StorageGateway implements StorageGateway {
   }
 
   async getSignedUrl(key: string): Promise<string> {
-    const command = new GetObjectCommand({
+    const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
     });

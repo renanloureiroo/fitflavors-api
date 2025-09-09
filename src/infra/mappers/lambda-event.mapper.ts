@@ -29,17 +29,15 @@ export class LambdaEventMapper {
           )
         : {},
       context: {
-        // Informações do usuário autenticado vindas do JWT Authorizer
-        // Para JWT authorizers, o contexto vem em requestContext.authorizer.jwt.claims
+        // Informações do usuário autenticado vindas do Lambda Authorizer
+        // Para HTTP API Gateway v2, o contexto vem em requestContext.authorizer.lambda
         userId:
-          (raw.requestContext as any)?.authorizer?.jwt?.claims?.sub ||
-          (raw.requestContext as any)?.authorizer?.sub ||
-          (raw.requestContext as any)?.authorizer?.userId ||
-          (raw.requestContext as any)?.authorizer?.['user-id'],
+          (raw.requestContext as any)?.authorizer?.lambda?.userId ||
+          (raw.requestContext as any)?.authorizer?.lambda?.['user-id'] ||
+          (raw.requestContext as any)?.authorizer?.lambda?.sub,
         email:
-          (raw.requestContext as any)?.authorizer?.jwt?.claims?.email ||
-          (raw.requestContext as any)?.authorizer?.email ||
-          (raw.requestContext as any)?.authorizer?.['user-email'],
+          (raw.requestContext as any)?.authorizer?.lambda?.email ||
+          (raw.requestContext as any)?.authorizer?.lambda?.['user-email'],
       },
     };
   }

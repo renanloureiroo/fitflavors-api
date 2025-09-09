@@ -1,11 +1,11 @@
 import {
-  APIGatewayRequestAuthorizerEvent,
+  APIGatewayRequestAuthorizerEventV2,
   APIGatewayAuthorizerResult,
 } from 'aws-lambda';
 import { JwtProviderImpl } from '@/infra/providers/jwt.provider';
 
 export async function handler(
-  event: APIGatewayRequestAuthorizerEvent
+  event: APIGatewayRequestAuthorizerEventV2
 ): Promise<APIGatewayAuthorizerResult> {
   try {
     const token = event.headers?.authorization || event.headers?.Authorization;
@@ -24,10 +24,7 @@ export async function handler(
       throw new Error('Token inválido');
     }
 
-    // Construir o ARN base para permitir acesso a todos os métodos da API
-    const methodArn = event.methodArn || '*';
-    const resourceArn = methodArn.replace(/\/[^/]*$/, '/*');
-
+    // Para HTTP API Gateway v2, retornamos Allow com contexto
     return {
       principalId: payload.sub,
       policyDocument: {
@@ -36,7 +33,7 @@ export async function handler(
           {
             Action: 'execute-api:Invoke',
             Effect: 'Allow',
-            Resource: resourceArn,
+            Resource: '*',
           },
         ],
       },
@@ -58,7 +55,7 @@ export async function handler(
           {
             Action: 'execute-api:Invoke',
             Effect: 'Deny',
-            Resource: event.methodArn,
+            Resource: '*',
           },
         ],
       },

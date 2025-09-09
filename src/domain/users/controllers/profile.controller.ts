@@ -14,6 +14,7 @@ export class ProfileController {
       const fetchProfileUsecase = new FetchProfileUsecase(
         new DrizzleUserRepository()
       );
+      console.log('context.userId', context.userId);
       const user = await fetchProfileUsecase.execute({
         id: context.userId,
       });

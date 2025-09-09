@@ -17,6 +17,6 @@ export class FetchProfileUsecase {
       throw new UserNotFoundError();
     }
 
-    return { user: user! };
+    return { user };
   }
 }

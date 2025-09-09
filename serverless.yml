@@ -28,18 +28,7 @@ provider:
           Action:
             - s3:PutObject
           Resource: !Sub ${UploadsBucket.Arn}/*
-        - Effect: Allow
-          Action:
-            - logs:CreateLogGroup
-            - logs:CreateLogStream
-            - logs:TagResource
-          Resource:
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${self:service}-${self:provider.stage}-*'
-        - Effect: Allow
-          Action:
-            - logs:PutLogEvents
-          Resource:
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${self:service}-${self:provider.stage}-*:*'
+
   httpApi:
     authorizers:
       authorizer:
@@ -47,6 +36,7 @@ provider:
         functionName: authorizer
         resultTtlInSeconds: 300
         identitySource: $request.header.Authorization
+        managedExternally: false
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
   # domain: api.example.com
