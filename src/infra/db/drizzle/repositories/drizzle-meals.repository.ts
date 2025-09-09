@@ -2,7 +2,7 @@ import { Meal, MealStatusEnum } from '@/domain/meals/entities/meal';
 import { MealsRepository } from '@/domain/meals/repositories/meals.repository';
 
 import { db } from '..';
-import { eq, and, gte, lt } from 'drizzle-orm';
+import { eq, and, gte, lte } from 'drizzle-orm';
 import { DrizzleMealMapper } from '../mapper/drizzle-meal.mapper';
 import { meals } from '../schema';
 
@@ -25,8 +25,9 @@ export class DrizzleMealsRepository implements MealsRepository {
     status: MealStatusEnum
   ): Promise<Meal[]> {
     const startDate = new Date(date);
+    startDate.setUTCHours(0, 0, 0, 0);
     const endDate = new Date(date);
-    endDate.setDate(endDate.getDate() + 1);
+    endDate.setUTCHours(23, 59, 59, 999);
 
     const result = (
       await db
@@ -37,7 +38,7 @@ export class DrizzleMealsRepository implements MealsRepository {
             eq(meals.userId, userId),
             eq(meals.status, status),
             gte(meals.createdAt, startDate),
-            lt(meals.createdAt, endDate)
+            lte(meals.createdAt, endDate)
           )
         )
     ).map(DrizzleMealMapper.toDomain);
