@@ -21,6 +21,8 @@ provider:
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN}
     ENCRYPT_SALTS: ${env:ENCRYPT_SALTS}
     AWS_S3_BUCKET_NAME: !Ref UploadsBucket
+    AWS_SQS_MEALS_QUEUE_URL: !Ref MealsQueue
+
   iam:
     role:
       statements:
@@ -28,6 +30,10 @@ provider:
           Action:
             - s3:PutObject
           Resource: !Sub ${UploadsBucket.Arn}/*
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource: !GetAtt MealsQueue.Arn
 
   httpApi:
     authorizers:
@@ -111,6 +117,13 @@ functions:
           event: s3:ObjectCreated:*
           existing: true
           forceDeploy: true
+
+  processMeals:
+    handler: src/infra/functions/process-meals.handler
+    events:
+      - sqs:
+          arn: !GetAtt MealsQueue.Arn
+          batchSize: 1
 
 resources:
   Resources:

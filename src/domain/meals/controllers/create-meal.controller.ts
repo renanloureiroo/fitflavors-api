@@ -11,6 +11,7 @@ import {
   schema,
 } from '../dtos/create-meal.dto';
 import { S3StorageGateway } from '@/infra/gateways/s3-storage.gateway';
+import { SQSQueueGateway } from '@/infra/gateways/sqs-queue.gateway';
 
 export class CreateMealController {
   static async handle(@Valid(schema) request: HttpRequest<CreateMealRequest>) {
@@ -18,7 +19,8 @@ export class CreateMealController {
 
     const createMealUsecase = new CreateMealUsecase(
       new DrizzleMealsRepository(),
-      new S3StorageGateway()
+      new S3StorageGateway(),
+      new SQSQueueGateway()
     );
     const { meal, signedUrl } = await createMealUsecase.execute({
       userId,

@@ -8,6 +8,13 @@ import { meals } from '../schema';
 import { startOfDayUTC, endOfDayUTC } from '@/core/utils/date-utils';
 
 export class DrizzleMealsRepository implements MealsRepository {
+  async findByInputFileKey(fileKey: string): Promise<Meal | null> {
+    const meal = (
+      await db.select().from(meals).where(eq(meals.inputFileKey, fileKey))
+    ).at(0);
+
+    return meal ? DrizzleMealMapper.toDomain(meal) : null;
+  }
   async findById(id: string): Promise<Meal | null> {
     const meal = (await db.select().from(meals).where(eq(meals.id, id))).at(0);
 
@@ -65,5 +72,15 @@ export class DrizzleMealsRepository implements MealsRepository {
     ).at(0);
 
     return DrizzleMealMapper.toDomain(result!);
+  }
+
+  async update(meal: Meal): Promise<Meal> {
+    const result = await db
+      .update(meals)
+      .set(DrizzleMealMapper.toPersistence(meal))
+      .where(eq(meals.id, meal.id.toValue()))
+      .returning();
+
+    return DrizzleMealMapper.toDomain(result.at(0)!);
   }
 }

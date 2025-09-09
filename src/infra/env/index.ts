@@ -8,6 +8,8 @@ const schema = z.object({
   ENCRYPT_SALTS: z.string(),
   // AWS S3 Configuration
   AWS_S3_BUCKET_NAME: z.string().optional(),
+  // AWS SQS Configuration
+  AWS_SQS_MEALS_QUEUE_URL: z.string().optional(),
 });
 
 export const env = schema.parse(process.env);
