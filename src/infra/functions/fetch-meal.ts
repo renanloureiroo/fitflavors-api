@@ -1,11 +1,19 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { LambdaEventMapper } from '../mappers/lambda-event.mapper';
 import { FetchMealController } from '@/domain/meals/controllers/fetch-meal.controller';
+import { FetchMealDTO } from '@/domain/meals/dtos/fetch-meal.dto';
+import { DefaultType } from '@/core/http/types/http';
 
 export const handler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
-  const httpRequest = LambdaEventMapper.toHttpRequest(event);
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResultV2> => {
+  const httpRequest = LambdaEventMapper.toHttpRequest<
+    DefaultType,
+    FetchMealDTO,
+    DefaultType
+  >(event);
 
-  return await FetchMealController.handle(httpRequest);
+  return LambdaEventMapper.toLambdaResponse(
+    await FetchMealController.handle(httpRequest)
+  );
 };

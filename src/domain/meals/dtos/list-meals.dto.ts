@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 import { MealResponseDTO } from './meal-response.dto';
 
 export const listMealsSchema = z.object({

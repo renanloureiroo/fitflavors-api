@@ -22,6 +22,7 @@ provider:
     ENCRYPT_SALTS: ${env:ENCRYPT_SALTS}
     AWS_S3_BUCKET_NAME: !Ref UploadsBucket
     AWS_SQS_MEALS_QUEUE_URL: !Ref MealsQueue
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
 
   iam:
     role:
@@ -29,6 +30,7 @@ provider:
         - Effect: Allow
           Action:
             - s3:PutObject
+            - s3:GetObject
           Resource: !Sub ${UploadsBucket.Arn}/*
         - Effect: Allow
           Action:

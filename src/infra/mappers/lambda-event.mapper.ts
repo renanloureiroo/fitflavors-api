@@ -32,12 +32,32 @@ export class LambdaEventMapper {
         // Informações do usuário autenticado vindas do Lambda Authorizer
         // Para HTTP API Gateway v2, o contexto vem em requestContext.authorizer.lambda
         userId:
-          (raw.requestContext as any)?.authorizer?.lambda?.userId ||
-          (raw.requestContext as any)?.authorizer?.lambda?.['user-id'] ||
-          (raw.requestContext as any)?.authorizer?.lambda?.sub,
+          (
+            raw.requestContext as unknown as {
+              authorizer: { lambda: { userId: string } };
+            }
+          )?.authorizer?.lambda?.userId ||
+          (
+            raw.requestContext as unknown as {
+              authorizer: { lambda: { 'user-id': string } };
+            }
+          )?.authorizer?.lambda?.['user-id'] ||
+          (
+            raw.requestContext as unknown as {
+              authorizer: { lambda: { sub: string } };
+            }
+          )?.authorizer?.lambda?.sub,
         email:
-          (raw.requestContext as any)?.authorizer?.lambda?.email ||
-          (raw.requestContext as any)?.authorizer?.lambda?.['user-email'],
+          (
+            raw.requestContext as unknown as {
+              authorizer: { lambda: { email: string } };
+            }
+          )?.authorizer?.lambda?.email ||
+          (
+            raw.requestContext as unknown as {
+              authorizer: { lambda: { 'user-email': string } };
+            }
+          )?.authorizer?.lambda?.['user-email'],
       },
     };
   }

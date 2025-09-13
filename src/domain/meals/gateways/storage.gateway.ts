@@ -5,4 +5,5 @@
 export interface StorageGateway {
   uploadFile(key: string): Promise<void>;
   getSignedUrl(key: string): Promise<string>;
+  getFile(key: string): Promise<Buffer>;
 }
