@@ -1,6 +1,6 @@
 # ADR-001: Escolha da Arquitetura Serverless
 
-**Data:** 2024-12-19  
+**Data:** 2025-09-07
 **Status:** Aceita  
 **Decisor(es):** Equipe de Desenvolvimento  
 **Consultado(s):** Arquitetos de Software, DevOps Team  
