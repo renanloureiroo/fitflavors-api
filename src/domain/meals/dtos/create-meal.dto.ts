@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { MealResponseDTO } from './meal-response.dto';
 
 export const schema = z.object({
   fileType: z.enum(['audio/m4a', 'image/jpeg']),
@@ -15,6 +14,6 @@ export type CreateMealDTO = {
 };
 
 export type CreateMealResponseDTO = {
-  meal: MealResponseDTO;
+  mealId: string;
   signedUrl: string;
 };

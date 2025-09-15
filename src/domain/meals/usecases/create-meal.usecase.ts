@@ -29,7 +29,7 @@ export class CreateMealUsecase {
   private async createMeal(data: CreateMealDTO): Promise<CreateMealResult> {
     const fileKey = this.getFileKey(data.fileType);
 
-    const signedUrl = await this.uploadFile(fileKey);
+    const signedUrl = await this.storageGateway.uploadFile(fileKey);
 
     const meal = Meal.create({
       userId: new UniqueEntityId(data.userId),
@@ -53,14 +53,6 @@ export class CreateMealUsecase {
     const ext = fileType === 'audio/m4a' ? '.m4a' : '.jpeg';
 
     return `${fileId.toString()}${ext}`;
-  }
-
-  private async uploadFile(fileKey: string): Promise<string> {
-    await this.storageGateway.uploadFile(fileKey);
-
-    const signedUrl = await this.storageGateway.getSignedUrl(fileKey);
-
-    return signedUrl;
   }
 
   private async sendMealToQueue(meal: Meal): Promise<void> {

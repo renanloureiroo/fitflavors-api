@@ -15,6 +15,14 @@ export enum MealStatusEnum {
   FAILED = 'failed',
 }
 
+export type Food = {
+  name: string;
+  quantity: string;
+  calories: number;
+  proteins: number;
+  carbohydrates: number;
+  fats: number;
+};
 type MealProps = {
   name: string | null;
   icon: string | null;
@@ -22,7 +30,7 @@ type MealProps = {
   status: MealStatusEnum;
   inputType: InputTypeEnum;
   inputFileKey: string;
-  foods: Array<unknown>;
+  foods: Array<Food>;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -107,7 +115,7 @@ export class Meal extends Entity<MealProps> {
     return this.props.foods;
   }
 
-  set foods(value: Array<unknown>) {
+  set foods(value: Array<Food>) {
     this.props.foods = value;
     this.touch();
   }

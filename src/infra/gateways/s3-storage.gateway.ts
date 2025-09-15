@@ -3,7 +3,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
-import { getSignedUrl as getSignedUrlPresigner } from '@aws-sdk/s3-request-presigner';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '../env';
 import { StorageGateway } from '@/domain/meals/gateways/storage.gateway';
 import { Readable } from 'node:stream';
@@ -22,14 +22,18 @@ export class S3StorageGateway implements StorageGateway {
     this.s3Client = new S3Client();
   }
 
-  async uploadFile(key: string): Promise<void> {
+  async uploadFile(key: string): Promise<string> {
     try {
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
         Key: key,
       });
 
-      await this.s3Client.send(command);
+      const presignedURL = await getSignedUrl(this.s3Client, command, {
+        expiresIn: 600,
+      });
+
+      return presignedURL;
     } catch (error) {
       throw new Error(
         `S3_UPLOAD_ERROR: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -38,32 +42,28 @@ export class S3StorageGateway implements StorageGateway {
   }
 
   async getFile(key: string): Promise<Buffer> {
-    const command = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-    const { Body } = await this.s3Client.send(command);
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      });
+      const { Body } = await this.s3Client.send(command);
 
-    if (!Body || !(Body instanceof Readable)) {
-      throw new Error('S3_GET_FILE_ERROR: File not found');
+      if (!Body || !(Body instanceof Readable)) {
+        throw new Error('S3_GET_FILE_ERROR: File not found');
+      }
+      const chunks = [];
+
+      for await (const chunk of Body) {
+        chunks.push(chunk);
+      }
+
+      return Buffer.concat(chunks);
+    } catch (error) {
+      console.log('error', error);
+      throw new Error(
+        `S3_GET_FILE_ERROR: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
-    const chunks = [];
-
-    for await (const chunk of Body) {
-      chunks.push(chunk);
-    }
-
-    return Buffer.concat(chunks);
-  }
-
-  async getSignedUrl(key: string): Promise<string> {
-    const command = new PutObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-
-    return await getSignedUrlPresigner(this.s3Client, command, {
-      expiresIn: 3600,
-    });
   }
 }

@@ -1,4 +1,5 @@
 import {
+  Food,
   InputTypeEnum,
   Meal,
   MealStatusEnum,
@@ -19,7 +20,7 @@ export class DrizzleMealMapper {
         status: raw.status as MealStatusEnum,
         inputType: raw.inputType as InputTypeEnum,
         inputFileKey: raw.inputFileKey ?? '',
-        foods: (raw.foods as Array<unknown>) ?? [],
+        foods: (raw.foods as Array<Food>) ?? [],
 
         createdAt: toUTC(raw.createdAt),
         updatedAt: toUTC(raw.updatedAt),

@@ -4,7 +4,6 @@ import { CreateMealUsecase } from '../usecases/create-meal.usecase';
 import { DrizzleMealsRepository } from '@/infra/db/drizzle/repositories/drizzle-meals.repository';
 import { HttpHandler } from '@/core/http/http-handler';
 
-import { MealPresenter } from '../presenters/meal.presenter';
 import {
   CreateMealRequest,
   CreateMealResponseDTO,
@@ -28,7 +27,7 @@ export class CreateMealController {
     });
 
     return HttpHandler.created<CreateMealResponseDTO>({
-      meal: MealPresenter.toHTTP(meal),
+      mealId: meal.id.toString(),
       signedUrl: signedUrl,
     });
   }
