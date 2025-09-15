@@ -75,6 +75,13 @@ functions:
           path: /signup
           method: post
 
+  refreshToken:
+    handler: src/infra/functions/refresh-token.handler
+    events:
+      - httpApi:
+          path: /refresh-token
+          method: post
+
   profile:
     handler: src/infra/functions/profile.handler
     events:
