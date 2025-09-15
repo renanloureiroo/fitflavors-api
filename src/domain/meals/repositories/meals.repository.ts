@@ -3,6 +3,7 @@ import { Meal, MealStatusEnum } from '../entities/meal';
 export interface MealsRepository {
   save(meal: Meal): Promise<Meal>;
   update(meal: Meal): Promise<Meal>;
+  delete(id: string): Promise<void>;
   findById(id: string): Promise<Meal | null>;
   findByUserId(userId: string): Promise<Meal[]>;
   findByUserIdAndDateAndStatus(

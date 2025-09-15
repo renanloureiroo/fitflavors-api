@@ -110,4 +110,8 @@ export class DrizzleMealsRepository implements MealsRepository {
 
     return DrizzleMealMapper.toDomain(updatedMeal);
   }
+
+  async delete(id: string): Promise<void> {
+    await db.delete(meals).where(eq(meals.id, id));
+  }
 }

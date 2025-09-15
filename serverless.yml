@@ -111,6 +111,15 @@ functions:
           authorizer:
             name: authorizer
 
+  deleteMeal:
+    handler: src/infra/functions/delete-meal.handler
+    events:
+      - httpApi:
+          path: /meals/{id}
+          method: delete
+          authorizer:
+            name: authorizer
+
   fileUploadEvent:
     handler: src/infra/functions/file-upload-event.handler
     events:

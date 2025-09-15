@@ -53,6 +53,24 @@ export class ProcessMealController {
 
         await mealRepository.update(meal);
       }
+
+      if (meal.inputType === InputTypeEnum.PICTURE) {
+        console.log('processing picture');
+        const pictureUrl = await s3StorageGateway.getImageUrl(
+          meal.inputFileKey
+        );
+        mealDetails = await openaiAiGateway.getMealDetailsFormPicture({
+          pictureUrl,
+          createdAt: meal.createdAt,
+        });
+
+        meal.name = mealDetails.name;
+        meal.icon = mealDetails.icon;
+        meal.foods = mealDetails.foods;
+        meal.status = MealStatusEnum.SUCCESS;
+
+        await mealRepository.update(meal);
+      }
     } catch (error) {
       console.log('error', error);
       meal.status = MealStatusEnum.FAILED;

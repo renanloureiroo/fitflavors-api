@@ -66,4 +66,22 @@ export class S3StorageGateway implements StorageGateway {
       );
     }
   }
+
+  async getImageUrl(key: string): Promise<string> {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      });
+
+      return getSignedUrl(this.s3Client, command, {
+        expiresIn: 600,
+      });
+    } catch (error) {
+      console.log('error', error);
+      throw new Error(
+        `S3_GET_IMAGE_URL_ERROR: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+    }
+  }
 }

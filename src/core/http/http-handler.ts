@@ -29,6 +29,13 @@ export class HttpHandler {
     };
   }
 
+  static noContent(): HttpResponse {
+    return {
+      statusCode: 204,
+      body: undefined as never,
+    };
+  }
+
   static badRequest<T extends DefaultType = DefaultType>(
     body: T = {} as T
   ): HttpResponse<T> {
