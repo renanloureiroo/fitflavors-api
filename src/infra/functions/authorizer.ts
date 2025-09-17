@@ -14,11 +14,11 @@ export async function handler(
       throw new Error('Token não fornecido');
     }
 
-    const cleanToken = token.startsWith('Bearer ') ? token.substring(7) : token;
+    const [_, cleanToken] = token.split(' ');
 
     const jwtProvider = new JwtProviderImpl();
 
-    const payload = jwtProvider.verifyToken(cleanToken);
+    const payload = jwtProvider.verifyToken(cleanToken!);
 
     if (!payload) {
       throw new Error('Token inválido');
