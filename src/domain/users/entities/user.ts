@@ -25,6 +25,10 @@ export type UserProps = {
   height: number;
   weight: number;
   activityLevel: ActivityLevelEnum;
+  countryCode: string | null;
+  areaCode: string | null;
+  phoneNumber: string | null;
+  phoneVerified: boolean;
   calories: number;
   proteins: number;
   carbohydrates: number;
@@ -37,6 +41,10 @@ class User extends Entity<UserProps> {
   static create(
     data: Optional<
       UserProps,
+      | 'areaCode'
+      | 'phoneNumber'
+      | 'countryCode'
+      | 'phoneVerified'
       | 'calories'
       | 'proteins'
       | 'carbohydrates'
@@ -49,6 +57,10 @@ class User extends Entity<UserProps> {
     return new User(
       {
         ...data,
+        areaCode: data.areaCode ?? null,
+        phoneNumber: data.phoneNumber ?? null,
+        countryCode: data.countryCode ?? null,
+        phoneVerified: data.phoneVerified ?? false,
         calories: data.calories ?? 0,
         proteins: data.proteins ?? 0,
         carbohydrates: data.carbohydrates ?? 0,
@@ -108,6 +120,58 @@ class User extends Entity<UserProps> {
   get birthDate() {
     return this.props.birthDate;
   }
+
+  get countryCode() {
+    return this.props.countryCode;
+  }
+
+  set countryCode(value: string | null) {
+    this.props.countryCode = value;
+
+    this.touch();
+  }
+
+  get areaCode() {
+    return this.props.areaCode;
+  }
+
+  set areaCode(value: string | null) {
+    this.props.areaCode = value;
+
+    this.touch();
+  }
+
+  get phoneNumber() {
+    return this.props.phoneNumber;
+  }
+
+  set phoneNumber(value: string | null) {
+    this.props.phoneNumber = value;
+
+    this.touch();
+  }
+
+  // Método para obter o número completo no formato internacional
+  get fullPhoneNumber(): string | undefined {
+    if (
+      !this.props.countryCode ||
+      !this.props.areaCode ||
+      !this.props.phoneNumber
+    ) {
+      return undefined;
+    }
+    return `+${this.props.countryCode}${this.props.areaCode}${this.props.phoneNumber}`;
+  }
+
+  get phoneVerified() {
+    return this.props.phoneVerified;
+  }
+
+  set phoneVerified(value: boolean) {
+    this.props.phoneVerified = value;
+    this.touch();
+  }
+
   get height() {
     return this.props.height;
   }

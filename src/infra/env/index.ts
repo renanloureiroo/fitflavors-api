@@ -10,6 +10,11 @@ const schema = z.object({
   AWS_S3_BUCKET_NAME: z.string().optional(),
   // AWS SQS Configuration
   AWS_SQS_MEALS_QUEUE_URL: z.string().optional(),
+  // WhatsApp Configuration
+  WHATSAPP_API_URL: z.string(),
+  WHATSAPP_ACCESS_TOKEN: z.string(),
+  WHATSAPP_PHONE_NUMBER_ID: z.string(),
+  WHATSAPP_OTP_TEMPLATE_NAME: z.string().default('fitflavors_otp_verification'),
 });
 
 export const env = schema.parse(process.env);

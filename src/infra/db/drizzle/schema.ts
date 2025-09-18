@@ -1,4 +1,5 @@
 import {
+  boolean,
   date,
   integer,
   json,
@@ -20,6 +21,12 @@ export const users = pgTable('users', {
   height: integer().notNull(),
   weight: integer().notNull(),
   activityLevel: integer('activity_level').notNull(),
+
+  // WHATSAPP
+  countryCode: varchar('country_code', { length: 4 }),
+  areaCode: varchar('area_code', { length: 2 }),
+  phoneNumber: varchar('phone_number', { length: 9 }),
+  phoneVerified: boolean('phone_verified').notNull().default(false),
 
   // GOALS
   calories: integer().notNull(),
@@ -53,4 +60,17 @@ export const meals = pgTable('meals', {
   foods: json(),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull(),
+});
+
+export const otpVerifications = pgTable('otp_verifications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  countryCode: varchar('country_code', { length: 4 }).notNull(),
+  areaCode: varchar('area_code', { length: 2 }).notNull(),
+  phoneNumber: varchar('phone_number', { length: 9 }).notNull(),
+  code: varchar('code', { length: 6 }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  verified: boolean('verified').notNull().default(false),
+  attempts: integer('attempts').notNull().default(0),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull(),
 });
