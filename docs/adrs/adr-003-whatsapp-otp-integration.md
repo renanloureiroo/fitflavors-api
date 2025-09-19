@@ -20,6 +20,7 @@ O FitFlavors API necessita de um sistema de verificação por OTP via WhatsApp p
 4. **Atender requisitos de negócio** para comunicação direta com usuários
 
 A aplicação atual utiliza:
+
 - Arquitetura serverless com AWS Lambda
 - Clean Architecture e Domain-Driven Design (DDD)
 - Node.js 22.x com TypeScript
@@ -35,11 +36,13 @@ A aplicação atual utiliza:
 ### Alternativa 1: Projeto Serverless Separado
 
 **Prós:**
+
 - Isolamento completo da funcionalidade
 - Deploy independente
 - Possibilidade de diferentes tecnologias
 
 **Contras:**
+
 - Duplicação de infraestrutura (DB, auth, monitoramento)
 - Complexidade de integração API-to-API
 - Overhead de manutenção de múltiplos projetos
@@ -49,11 +52,13 @@ A aplicação atual utiliza:
 ### Alternativa 2: Migração para API Tradicional com Servidor
 
 **Prós:**
+
 - Controle total sobre o ambiente de execução
 - Facilidade para implementações complexas de longo prazo
 - Melhor para casos de uso com estado persistente
 
 **Contras:**
+
 - Perda dos benefícios serverless (escalabilidade automática, custo por uso)
 - Necessidade de gerenciar infraestrutura de servidor
 - Migração complexa da arquitetura existente
@@ -63,6 +68,7 @@ A aplicação atual utiliza:
 ### Alternativa 3: Integração na Arquitetura Atual (Escolhida)
 
 **Prós:**
+
 - Mantém consistência arquitetural (Clean Architecture + DDD)
 - Reutiliza infraestrutura existente (DB, JWT, monitoramento)
 - Escalabilidade automática do AWS Lambda
@@ -71,6 +77,7 @@ A aplicação atual utiliza:
 - Deploy e CI/CD já configurados
 
 **Contras:**
+
 - Limite de tempo de execução do Lambda (15 min - não impacta OTP)
 - Dependência da infraestrutura AWS
 - Cold start potencial (mitigado com Provisioned Concurrency se necessário)

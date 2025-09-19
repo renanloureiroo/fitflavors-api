@@ -4,7 +4,7 @@ import { Valid } from '@/core/decorators/valid.decorator';
 import { HandlerAppError } from '@/core/utils/handler-app-error';
 import { RequestOTPUsecase } from '../usecases/request-otp.usecase';
 import { DrizzleOTPVerificationRepository } from '@/infra/db/drizzle/repositories/drizzle-otp-verification.repository';
-import { WhatsAppApiProvider } from '@/infra/providers/whatsapp-api.provider';
+import { WhatsAppApiGateway } from '@/infra/providers/whatsapp-api.provider';
 import {
   requestOTPSchema,
   RequestOTPRequest,
@@ -21,11 +21,11 @@ export class RequestOTPController {
       const userId = request.context.userId!;
 
       const otpRepository = new DrizzleOTPVerificationRepository();
-      const whatsappProvider = new WhatsAppApiProvider();
+      const whatsappGateway = new WhatsAppApiGateway();
 
       const requestOTPUsecase = new RequestOTPUsecase(
         otpRepository,
-        whatsappProvider
+        whatsappGateway
       );
 
       const result = await requestOTPUsecase.execute({

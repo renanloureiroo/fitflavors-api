@@ -8,9 +8,11 @@ import { RequestOTPController } from '@/domain/users/controllers/request-otp.con
 export const handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
-  const httpRequest = LambdaEventMapper.toHttpRequest<{ phoneNumber: string }>(
-    event
-  );
+  const httpRequest = LambdaEventMapper.toHttpRequest<{
+    countryCode: string;
+    areaCode: string;
+    phoneNumber: string;
+  }>(event);
   const httpResponse = await RequestOTPController.handle(httpRequest);
 
   return LambdaEventMapper.toLambdaResponse(httpResponse);

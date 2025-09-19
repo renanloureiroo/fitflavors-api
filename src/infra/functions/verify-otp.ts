@@ -9,6 +9,8 @@ export const handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
   const httpRequest = LambdaEventMapper.toHttpRequest<{
+    countryCode: string;
+    areaCode: string;
     phoneNumber: string;
     code: string;
   }>(event);

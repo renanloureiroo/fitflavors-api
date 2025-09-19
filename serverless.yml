@@ -14,6 +14,7 @@ provider:
   region: us-east-1
   runtime: nodejs22.x
   architecture: arm64
+  timeout: 25 # timeout padrão de 25 segundos (deixa margem para o API Gateway)
   logRetentionInDays: 14
   environment:
     DATABASE_URL: ${env:DATABASE_URL}
@@ -142,6 +143,7 @@ functions:
 
   processMeals:
     handler: src/infra/functions/process-meals.handler
+    timeout: 300 # 5 minutos para processamento com OpenAI
     events:
       - sqs:
           arn: !GetAtt MealsQueue.Arn

@@ -4,7 +4,7 @@ export interface WhatsAppMessage {
   timestamp: Date;
 }
 
-export interface WhatsAppProvider {
+export interface WhatsAppGateway {
   sendOTP(phoneNumber: string, code: string): Promise<WhatsAppMessage>;
   isHealthy(): Promise<boolean>;
 }

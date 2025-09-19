@@ -2,10 +2,10 @@ import axios, { AxiosInstance } from 'axios';
 import { env } from '../env';
 import {
   WhatsAppMessage,
-  WhatsAppProvider,
-} from '@/domain/users/providers/whatsapp.provider';
+  WhatsAppGateway,
+} from '@/domain/users/gateways/whatsapp.gateway';
 
-export class WhatsAppApiProvider implements WhatsAppProvider {
+export class WhatsAppApiGateway implements WhatsAppGateway {
   private readonly client: AxiosInstance;
 
   constructor() {
@@ -27,11 +27,29 @@ export class WhatsAppApiProvider implements WhatsAppProvider {
         type: 'template',
         template: {
           name: env.WHATSAPP_OTP_TEMPLATE_NAME,
-          language: { code: 'pt_BR' },
+          language: {
+            code: 'pt_BR',
+          },
           components: [
             {
               type: 'body',
-              parameters: [{ type: 'text', text: code }],
+              parameters: [
+                {
+                  type: 'text',
+                  text: code,
+                },
+              ],
+            },
+            {
+              type: 'button',
+              sub_type: 'url',
+              index: '0',
+              parameters: [
+                {
+                  type: 'text',
+                  text: code,
+                },
+              ],
             },
           ],
         },
@@ -49,7 +67,6 @@ export class WhatsAppApiProvider implements WhatsAppProvider {
       };
     } catch (error) {
       console.error('WhatsApp API Error:', error);
-
       throw new Error(
         `Falha ao enviar mensagem WhatsApp: ${
           error instanceof Error ? error.message : 'Erro desconhecido'
@@ -60,7 +77,6 @@ export class WhatsAppApiProvider implements WhatsAppProvider {
 
   async isHealthy(): Promise<boolean> {
     try {
-      // Teste simples de conectividade com a API
       await this.client.get(`/${env.WHATSAPP_PHONE_NUMBER_ID}`, {
         timeout: 5000,
       });

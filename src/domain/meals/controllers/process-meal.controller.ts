@@ -36,8 +36,10 @@ export class ProcessMealController {
       if (meal.inputType === InputTypeEnum.AUDIO) {
         console.log('processing audio');
         const fileBuffer = await s3StorageGateway.getFile(meal.inputFileKey);
+        console.log('fileBuffer', fileBuffer);
 
         const text = await openaiAiGateway.transcribeAudio(fileBuffer);
+        console.log('text', text);
 
         mealDetails = await openaiAiGateway.getMealDetailsFormText({
           text,

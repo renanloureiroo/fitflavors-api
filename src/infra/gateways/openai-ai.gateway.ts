@@ -31,7 +31,7 @@ const FoodSchema = z.object({
 const MealDetailsSchema = z.object({
   name: z.string().min(1, 'Meal name is required'),
   icon: z.string().min(1, 'Meal icon is required'),
-  foods: z.array(FoodSchema).min(1, 'At least one food item is required'),
+  foods: z.array(FoodSchema).min(0, 'At least one food item is required'),
 });
 
 export class OpenaiAiGateway {

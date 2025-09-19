@@ -11,9 +11,16 @@ const schema = z.object({
   // AWS SQS Configuration
   AWS_SQS_MEALS_QUEUE_URL: z.string().optional(),
   // WhatsApp Configuration
-  WHATSAPP_API_URL: z.string(),
-  WHATSAPP_ACCESS_TOKEN: z.string(),
-  WHATSAPP_PHONE_NUMBER_ID: z.string(),
+  WHATSAPP_API_URL: z
+    .string()
+    .url()
+    .default('https://graph.facebook.com/v21.0'),
+  WHATSAPP_ACCESS_TOKEN: z
+    .string()
+    .min(1, 'WHATSAPP_ACCESS_TOKEN é obrigatório'),
+  WHATSAPP_PHONE_NUMBER_ID: z
+    .string()
+    .min(1, 'WHATSAPP_PHONE_NUMBER_ID é obrigatório'),
   WHATSAPP_OTP_TEMPLATE_NAME: z.string().default('fitflavors_otp_verification'),
 });
 
